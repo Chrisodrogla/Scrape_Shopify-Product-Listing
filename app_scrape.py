@@ -4,7 +4,8 @@ from selenium import webdriver
 import pandas as pd
 from bs4 import BeautifulSoup
 
-#extract links from a given page from OJP
+
+# extract links from a given page from OJP
 def get_links_from_page(driver, page_url):
     driver.get(page_url)
     time.sleep(4)
@@ -20,7 +21,7 @@ def get_links_from_page(driver, page_url):
     return link_visit
 
 
-#extract data from a given link using BeautifulSoup
+# extract data from a given link using BeautifulSoup
 def extract_data(link):
     response = requests.get(link)
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -120,7 +121,6 @@ data_list = []
 for link in overall_links:
     data = extract_data(link)
     data_list.append(data)
-
 
 df = pd.DataFrame(data_list)
 
