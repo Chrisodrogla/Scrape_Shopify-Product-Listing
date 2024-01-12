@@ -31,9 +31,9 @@ def extract_data(link):
     html_bodies = soup.find_all('div', {'class': 'accordion__content p2 p2--fixed rte'})
     vendors = soup.find('p', {
         'class': 'main-product__text-field p2 p2--fixed underlined-link underlined-link--no-offset bold'}).a.text
-    product_categories = "N/A"
-    type = "N/A"
-    tags = "N/A"
+    product_categories = "  "
+    type = "  "
+    tags = "  "
     published = "TRUE"
     colors_elements = soup.find_all('div', {'class': 'main-product__form-option--style-label'})
     colors = ', '.join([element.text.strip().strip('') for element in colors_elements])
@@ -53,16 +53,16 @@ def extract_data(link):
     variant_inventory_policy = "deny"
     variant_fulfillment_service = "manual"
     variant_price_element = soup.find('ins', {'class': 'price__sale'})
-    variant_price = variant_price_element.text if variant_price_element else "N/A"
+    variant_price = variant_price_element.text if variant_price_element else "  "
     variant_compare_at_price_element = soup.find('del', {'class': 'price__compare'})
-    variant_compare_at_price = variant_compare_at_price_element.text if variant_compare_at_price_element else "N/A"
+    variant_compare_at_price = variant_compare_at_price_element.text if variant_compare_at_price_element else "  "
     variant_requires_shipping = "TRUE"
     variant_taxable = "TRUE"
-    variant_barcode = "N/A"
-    variant_image = "N/A"
+    variant_barcode = "  "
+    variant_image = "  "
     variant_weight_unit = "lb"
-    variant_tax_code = "N/A"
-    cost_per_item = "N/A"
+    variant_tax_code = "  "
+    cost_per_item = "  "
     status = "draft"
 
     # Create a dictionary for the data
