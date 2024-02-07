@@ -46,15 +46,15 @@ time.sleep(2)
 Export=driver.find_element("xpath", """//*[@id="uniqName_14_3"]/div[3]/span[2]/span""").click()
 
 # Wait for download to complete (adjust time.sleep duration as needed)
-time.sleep(10)
+time.sleep(20)
 
-# Move downloaded file to your GitHub repository directory
-temp_download_path = "/path/to/temporary/download/directory"
-downloaded_file = os.path.join(temp_download_path, "name_of_downloaded_file.csv")  # Adjust the file name as needed
-target_repo_path = "/path/to/your/repository"
-
-# Move the downloaded file to your GitHub repository directory
-os.rename(downloaded_file, os.path.join(target_repo_path, "name_of_downloaded_file.csv"))
+# # Move downloaded file to your GitHub repository directory
+# temp_download_path = "/path/to/temporary/download/directory"
+# downloaded_file = os.path.join(temp_download_path, "name_of_downloaded_file.csv")  # Adjust the file name as needed
+# target_repo_path = "/path/to/your/repository"
+#
+# # Move the downloaded file to your GitHub repository directory
+# os.rename(downloaded_file, os.path.join(target_repo_path, "name_of_downloaded_file.csv"))
 
 # Close the WebDriver
 driver.quit()
