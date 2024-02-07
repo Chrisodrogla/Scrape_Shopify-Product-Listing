@@ -23,6 +23,6 @@ jobs:
 
       - name: Run Python Script
         env:
-          USERNAME_SECRET: ${{ secrets.D_USERNAME_SECRET }}
-          PASSWORD_SECRET: ${{ secrets.D_PASSWORD_SECRET }}
+          D_USERNAME_SECRET: ${{ secrets.D_USERNAME_SECRET }}
+          D_PASSWORD_SECRET: ${{ secrets.D_PASSWORD_SECRET }}
         run: python dannerlac.py
