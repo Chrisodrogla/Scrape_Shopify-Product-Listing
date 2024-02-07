@@ -22,8 +22,14 @@ df = pd.read_excel(excel_file_path)
 # Modify Quantity Available column to remove the sign
 df['Quantity Available'] = df['Quantity Available'].astype(str).str.replace('+', '')
 
+# Handle missing values by replacing them with empty strings
+df['Style Number'] = df['Style Number'].fillna('')
+df['Color Code'] = df['Color Code'].fillna('')
+df['Size'] = df['Size'].fillna('')
+df['Alt Size'] = df['Alt Size'].fillna('')
+
 # Add a new column "New SKU"
-df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'].astype(str) + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
+df['New SKU'] = df['Style Number'] + "-" + df['Color Code'] + "-" + df['Size'] + df['Alt Size']
 
 # Save the DataFrame as a CSV file
 csv_file_path = os.path.splitext(excel_file_path)[0] + ".csv"
