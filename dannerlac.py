@@ -6,6 +6,9 @@ from selenium import webdriver
 username = os.environ['D_USERNAME_SECRET']
 password = os.environ['D_PASSWORD_SECRET']
 
+# Define the repository directory
+repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
+
 website = 'https://lfi.elasticsuite.com/#builder,order'
 
 # Set up Chrome WebDriver with custom download directory
@@ -16,7 +19,7 @@ options.add_argument("--no-sandbox")
 options.add_argument("--disable-gpu")
 options.add_argument("--window-size=1920x1080")
 options.add_experimental_option("prefs", {
-    "download.default_directory": "/path/to/temporary/download/directory",
+    "download.default_directory": repo_directory,  # Set the download directory to the repository directory
     "download.prompt_for_download": False,
     "download.directory_upgrade": True,
     "safebrowsing.enabled": True
@@ -37,26 +40,16 @@ Menu =driver.find_element("xpath", """//*[@id="dijit__WidgetsInTemplateMixin_0"]
 time.sleep(2)
 third=driver.find_element("xpath", """//*[@id="dijit_MenuItem_6"]""").click()
 time.sleep(2)
-# fourth=driver.find_element("xpath", """//*[@id="uniqName_14_3"]/div[3]/span[2]""").click()
-# time.sleep(10)
+
 Fullcatalog=driver.find_element("xpath", """//*[@id="uniqName_14_3_full_catalog"]""").click()
 time.sleep(10)
 Allproducts=driver.find_element("xpath", """//*[@id="uniqName_14_3_all"]""").click()
 time.sleep(10)
 Export=driver.find_element("xpath", """//*[@id="uniqName_14_3"]/div[3]/span[2]/span""").click()
 
-# Wait for download to complete (adjust time.sleep duration as needed)
+
 time.sleep(30)
 
-# # Move downloaded file to your GitHub repository directory
-# temp_download_path = "/path/to/temporary/download/directory"
-# downloaded_file = os.path.join(temp_download_path, "name_of_downloaded_file.csv")  # Adjust the file name as needed
-# target_repo_path = "/path/to/your/repository"
-#
-# # Move the downloaded file to your GitHub repository directory
-# os.rename(downloaded_file, os.path.join(target_repo_path, "name_of_downloaded_file.csv"))
-
-# Close the WebDriver
 driver.quit()
 
 
