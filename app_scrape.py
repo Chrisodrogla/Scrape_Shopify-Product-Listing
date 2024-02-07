@@ -1,5 +1,5 @@
 import time
-import requests  # Add this line
+import requests 
 from selenium import webdriver
 import pandas as pd
 from bs4 import BeautifulSoup
@@ -20,7 +20,7 @@ def get_links_from_page(driver, page_url):
     return link_visit
 
 
-#extract data from a given link using BeautifulSoup
+
 def extract_data(link):
     response = requests.get(link)
     soup = BeautifulSoup(response.text, 'html.parser')
