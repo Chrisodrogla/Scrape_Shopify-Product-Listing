@@ -38,15 +38,15 @@ time.sleep(2)
 third=driver.find_element("xpath", """//*[@id="dijit_MenuItem_6"]""").click()
 time.sleep(2)
 fourth=driver.find_element("xpath", """//*[@id="uniqName_14_3"]/div[3]/span[2]""").click()
-time.sleep(2)
+time.sleep(10)
 Fullcatalog=driver.find_element("xpath", """//*[@id="uniqName_14_3_full_catalog"]""").click()
-time.sleep(2)
+time.sleep(10)
 Allproducts=driver.find_element("xpath", """//*[@id="uniqName_14_3_all"]""").click()
-time.sleep(2)
+time.sleep(10)
 Export=driver.find_element("xpath", """//*[@id="uniqName_14_3"]/div[3]/span[2]/span""").click()
 
 # Wait for download to complete (adjust time.sleep duration as needed)
-time.sleep(20)
+time.sleep(30)
 
 # # Move downloaded file to your GitHub repository directory
 # temp_download_path = "/path/to/temporary/download/directory"
