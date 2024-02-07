@@ -1,6 +1,10 @@
 import pandas as pd
 import os
 
+# Get the current working directory
+current_dir = os.getcwd()
+print("Current working directory:", current_dir)
+
 # Get the directory of the script
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
