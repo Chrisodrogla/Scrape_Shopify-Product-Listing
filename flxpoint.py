@@ -26,13 +26,13 @@ driver = webdriver.Chrome(options=options)
 driver.get(flx)
 time.sleep(5)
 
-driver.find_element("xpath", """//*[@id="app"]/div[1]/div/form/div[1]/div/input""").send_keys(username2)
+driver.find_element(By.XPATH, '//*[@id="app"]/div[1]/div/form/div[1]/div/input').send_keys(username2)
 time.sleep(2)
-driver.find_element("xpath", """//*[@id="app"]/div[1]/div/form/div[2]/div/input""").send_keys(passw2)
+driver.find_element(By.XPATH, '//*[@id="app"]/div[1]/div/form/div[2]/div/input').send_keys(passw2)
 
-log = driver.find_element("xpath", """//*[@id="app"]/div[1]/div/form/button""")
+log = driver.find_element(By.XPATH, '//*[@id="app"]/div[1]/div/form/button')
 log.click()
-time.sleep(10)
+time.sleep(2)
 
 # Wait until the Manual button is clickable
 manual_button_xpath = '//*[@id="primary-content"]/div[2]/div/div/div/div/div/div/div[1]/div[1]/div[6]/button'
@@ -50,11 +50,14 @@ for filename in os.listdir(directory):
         excel_file_path = os.path.join(directory, filename)
         break
 
+if excel_file_path is None:
+    print("No Excel file found in the directory.")
+    driver.quit()
+    exit()
 
-    # Your existing code to upload the file
-    file_input = driver.find_element(By.XPATH,
-                                     '//*[@id="primary-content"]/div[2]/div/div/div/div/div/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div/div/input')
-    file_input.send_keys(excel_file_path)
+# Your existing code to upload the file
+file_input = driver.find_element(By.XPATH, '//*[@id="primary-content"]/div[2]/div/div/div/div/div/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div/div/input')
+file_input.send_keys(excel_file_path)
 
 time.sleep(50)
 driver.quit()
