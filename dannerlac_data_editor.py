@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 # Define the directory path
-directory = "Downloads/Downloads/"
+directory = "Downloads/"
 
 # Find the Excel file with the end name ".xlsx"
 excel_file_path = None
