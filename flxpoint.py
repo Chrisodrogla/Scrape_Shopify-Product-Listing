@@ -77,13 +77,21 @@ def Updatearchive():
         if filename.endswith(('.csv', '.xlsx')):
             source_file = os.path.join(downloads_directory, filename)
             destination_file = os.path.join(archive_directory, filename)
-            shutil.copy(source_file, destination_file)
+            try:
+                shutil.copy(source_file, destination_file)
+                print(f"Copied {filename} to Archive")
+            except Exception as e:
+                print(f"Error copying {filename}: {e}")
 
     # Delete all CSV and XLSX files from Downloads
     for filename in os.listdir(downloads_directory):
         if filename.endswith(('.csv', '.xlsx')):
             file_path = os.path.join(downloads_directory, filename)
-            os.remove(file_path)
+            try:
+                os.remove(file_path)
+                print(f"Deleted {filename} from Downloads")
+            except Exception as e:
+                print(f"Error deleting {filename} from Downloads: {e}")
 
 # Call the function to update the archive
 Updatearchive()
