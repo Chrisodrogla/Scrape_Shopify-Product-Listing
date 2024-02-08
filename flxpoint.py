@@ -41,7 +41,7 @@ manual_button.click()
 
 time.sleep(3)
 
-directory = "Downloads/Downloads/"
+directory = "Downloads/"
 
 # Find the Excel file with the end name ".xlsx"
 excel_file_path = None
