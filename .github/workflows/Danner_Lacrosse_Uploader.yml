@@ -1,101 +1,38 @@
-name: Danner_Lacrosse_Uploader
+name: Danner Lacrosse Uploader
 
 on:
   workflow_dispatch:
 
 jobs:
-  run_DANNERLAC:
+  automate:
+    name: Automate Job
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install Dependencies
+      - name: Run automate.yml
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          # Run automate.yml script or commands here
 
-      - name: Run DANNERLAC Python Script
-        env:
-          D_USERNAME_SECRET: ${{ secrets.D_USERNAME_SECRET }}
-          D_PASSWORD_SECRET: ${{ secrets.D_PASSWORD_SECRET }}
-        run: python dannerlac.py
-
-      - name: Commit and Push Downloaded File for DANNERLAC
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Downloads/  # Assuming the downloaded file is in the Downloads directory
-          git commit -m "Add downloaded file for DANNERLAC"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
-
-  run_EXCEL_TO_CSV:
+  excel_csv:
+    name: Excel CSV Job
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: pip install pandas openpyxl
-
-      - name: Run Excel to CSV conversion script
-        run: python dannerlac_data_editor.py
-
-      - name: Commit and Push Modified CSV File for EXCEL_TO_CSV
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Downloads/  # Assuming the downloaded file is in the Downloads directory
-          git commit -m "Add modified CSV file for EXCEL_TO_CSV"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
-
-  run_FLX_Upload:
-    runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install Dependencies for FLX_Upload
+      - name: Run excel_csv.yml
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          # Run excel_csv.yml script or commands here
 
-      - name: Run FLX_Upload Python Script
-        env:
-          FLX_USERNAME_SECRET: ${{ secrets.FLX_USERNAME_SECRET }}
-          FLX_PASSWORD_SECRET: ${{ secrets.FLX_PASSWORD_SECRET }}
-        run: python flxpoint.py
+  flxpoint:
+    name: Flxpoint Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - name: Commit and Push Archive File for FLX_Upload
+      - name: Run flxpoint.yml
         run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Archive/  # Assuming the archived file is in the Archive directory
-          git commit -m "Add archived file for FLX_Upload"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
-
-      - name: Commit and Push Cleared Downloaded File for FLX_Upload
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Downloads/  # Assuming the downloaded file is in the Downloads directory
-          git commit -m "Clear downloaded file for FLX_Upload"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
+          # Run flxpoint.yml script or commands here
