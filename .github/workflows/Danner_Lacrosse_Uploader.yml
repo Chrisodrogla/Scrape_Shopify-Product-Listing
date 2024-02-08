@@ -3,99 +3,30 @@ name: Danner_Lacrosse_Uploader
 on:
   workflow_dispatch:
 
-jobs:
-  run_DANNERLAC:
-    runs-on: ubuntu-latest
+  jobs:
+    orchestrate:
+      runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      steps:
+        # Step 1: Run automate.yml
+        - name: Run automate.yml
+          uses: ./.github/workflows/automate.yml
+          # Add any necessary inputs for automate.yml here
+          with:
+          # Specify if automate.yml requires any inputs
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+        # Step 2: Run excel_csv.yml only after automate.yml completes
+        - name: Run excel_csv.yml
+          if: success() # Only run if the previous step (automate.yml) was successful
+          uses: ./.github/workflows/excel_csv.yml
+          # Add any necessary inputs for excel_csv.yml here
+          with:
+          # Specify if excel_csv.yml requires any inputs
 
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run DANNERLAC Python Script
-        env:
-          D_USERNAME_SECRET: ${{ secrets.D_USERNAME_SECRET }}
-          D_PASSWORD_SECRET: ${{ secrets.D_PASSWORD_SECRET }}
-        run: python dannerlac.py
-
-      - name: Commit and Push Downloaded File for DANNERLAC
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Downloads/  # Assuming the downloaded file is in the Downloads directory
-          git commit -m "Add downloaded file for DANNERLAC"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
-
-  run_EXCEL_TO_CSV:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: pip install pandas openpyxl
-
-      - name: Run Excel to CSV conversion script
-        run: python dannerlac_data_editor.py
-
-      - name: Commit and Push Modified CSV File for EXCEL_TO_CSV
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Downloads/  # Assuming the downloaded file is in the Downloads directory
-          git commit -m "Add modified CSV file for EXCEL_TO_CSV"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
-
-  run_FLX_Upload:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install Dependencies for FLX_Upload
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run FLX_Upload Python Script
-        env:
-          FLX_USERNAME_SECRET: ${{ secrets.FLX_USERNAME_SECRET }}
-          FLX_PASSWORD_SECRET: ${{ secrets.FLX_PASSWORD_SECRET }}
-        run: python flxpoint.py
-
-      - name: Commit and Push Archive File for FLX_Upload
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Archive/  # Assuming the archived file is in the Archive directory
-          git commit -m "Add archived file for FLX_Upload"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
-
-      - name: Commit and Push Cleared Downloaded File for FLX_Upload
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Downloads/  # Assuming the downloaded file is in the Downloads directory
-          git commit -m "Clear downloaded file for FLX_Upload"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
+        # Step 3: Run flxpoint.yml only after excel_csv.yml completes
+        - name: Run flxpoint.yml
+          if: success() # Only run if the previous step (excel_csv.yml) was successful
+          uses: ./.github/workflows/flxpoint.yml
+          # Add any necessary inputs for flxpoint.yml here
+          with:
+          # Specify if flxpoint.yml requires any inputs
