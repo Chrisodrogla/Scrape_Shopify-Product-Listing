@@ -27,6 +27,11 @@ jobs:
           FLX_PASSWORD_SECRET: ${{ secrets.FLX_PASSWORD_SECRET }}
         run: python flxpoint.py
 
+      - name: add delete
+        run: python add_delete.py
+
+
+
       - name: Commit and Push Downloaded File
         run: |
           git config --global user.email "actions@github.com"
