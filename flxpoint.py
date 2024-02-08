@@ -46,7 +46,7 @@ directory = "Downloads/"
 # Find the Excel file with the end name ".xlsx"
 excel_file_path = None
 for filename in os.listdir(directory):
-    if filename.endswith(".xlsx"):
+    if filename.endswith(".csv"):
         excel_file_path = os.path.abspath(os.path.join(directory, filename))
         break
 
