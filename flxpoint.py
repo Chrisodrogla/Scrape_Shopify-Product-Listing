@@ -11,7 +11,7 @@ username2 = os.environ['FLX_USERNAME_SECRET']
 passw2 = os.environ['FLX_PASSWORD_SECRET']
 
 
-flx = 'https://app.flxpoint.com/sources/982516/integrations/1'
+flx = 'https://app.flxpoint.com/sources/982516/integrations/12'
 
 # Set up Chrome WebDriver with custom download directory
 options = webdriver.ChromeOptions()
