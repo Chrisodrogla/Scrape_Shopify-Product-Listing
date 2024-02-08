@@ -60,7 +60,14 @@ if excel_file_path is None:
 file_input = driver.find_element(By.XPATH, '//*[@id="primary-content"]/div[2]/div/div/div/div/div/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div/div/input')
 file_input.send_keys(excel_file_path)
 
-time.sleep(50)
+time.sleep(5)
+
+
+Run_file = '//*[@id="primary-content"]/div[2]/div/div/div/div/div/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div/div[2]/div[1]/div/div/div'
+Run_file = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, manual_button_xpath)))
+Run_file.click()
+
+time.sleep(60)
 driver.quit()
 
 def copy_to_archive():
