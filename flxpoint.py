@@ -72,12 +72,18 @@ def Updatearchive():
     if not os.path.exists(archive_directory):
         os.makedirs(archive_directory)
 
-    # Move all CSV and XLSX files from Downloads to Archive
+    # Copy all CSV and XLSX files from Downloads to Archive
     for filename in os.listdir(downloads_directory):
         if filename.endswith(('.csv', '.xlsx')):
             source_file = os.path.join(downloads_directory, filename)
             destination_file = os.path.join(archive_directory, filename)
-            shutil.move(source_file, destination_file)
+            shutil.copy(source_file, destination_file)
+
+    # Delete all CSV and XLSX files from Downloads
+    for filename in os.listdir(downloads_directory):
+        if filename.endswith(('.csv', '.xlsx')):
+            file_path = os.path.join(downloads_directory, filename)
+            os.remove(file_path)
 
 # Call the function to update the archive
 Updatearchive()
