@@ -27,26 +27,20 @@ jobs:
           FLX_PASSWORD_SECRET: ${{ secrets.FLX_PASSWORD_SECRET }}
         run: python flxpoint.py
 
-      - name: add
-        run: python add_archive.py
 
-
-
-      - name: Commit and Push Downloaded File
+      - name: Commit and Push Archive File
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          git add Downloads/  # Assuming the downloaded file is in the Downloads directory
-          git commit -m "Add downloaded file"
+          git add Archive/  # Assuming the downloaded file is in the Downloads directory
+          git commit -m "Add archive downloaded file"
           git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
 
-      - name: delete
-        run: python del_downloads.py
 
       - name: Commit and Push Downloaded File
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
           git add Downloads/  # Assuming the downloaded file is in the Downloads directory
-          git commit -m "Add downloaded file"
+          git commit -m "Clear downloaded file"
           git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
