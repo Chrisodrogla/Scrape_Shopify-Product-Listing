@@ -32,7 +32,7 @@ driver.find_element("xpath", """//*[@id="app"]/div[1]/div/form/div[2]/div/input"
 
 log = driver.find_element("xpath", """//*[@id="app"]/div[1]/div/form/button""")
 log.click()
-time.sleep(2)
+time.sleep(10)
 
 # Wait until the Manual button is clickable
 manual_button_xpath = '//*[@id="primary-content"]/div[2]/div/div/div/div/div/div/div[1]/div[1]/div[6]/button'
