@@ -47,8 +47,9 @@ directory = "Downloads/Downloads/"
 excel_file_path = None
 for filename in os.listdir(directory):
     if filename.endswith(".xlsx"):
-        excel_file_path = os.path.join(directory, filename)
+        excel_file_path = os.path.abspath(os.path.join(directory, filename))
         break
+
 
 if excel_file_path is None:
     print("No Excel file found in the directory.")
