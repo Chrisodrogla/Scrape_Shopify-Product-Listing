@@ -1,0 +1,36 @@
+name: FLX_Upload
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Python Script
+        env:
+          D_USERNAME_SECRET: ${{ secrets.FLX_USERNAME_SECRET }}
+          D_PASSWORD_SECRET: ${{ secrets.FLX_PASSWORD_SECRET }}
+        run: python flxpoint.py
+
+      - name: Commit and Push Downloaded File
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add Downloads/  # Assuming the downloaded file is in the Downloads directory
+          git commit -m "Add downloaded file"
+          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
