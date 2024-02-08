@@ -1,98 +1,32 @@
-name: Danner Lacrosse Uploader
+name: Danner_Lacrosse_Uploader
 
 on:
   workflow_dispatch:
 
-jobs:
-  automate:
-    name: Automate Job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+  jobs:
+    orchestrate:
+      runs-on: ubuntu-latest
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+      steps:
+        # Step 1: Run automate.yml
+        - name: Run automate.yml
+          uses: ./.github/workflows/automate.yml
+          # Add any necessary inputs for automate.yml here
+          with:
+          # Specify if automate.yml requires any inputs
 
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+        # Step 2: Run excel_csv.yml only after automate.yml completes
+        - name: Run excel_csv.yml
+          if: success() # Only run if the previous step (automate.yml) was successful
+          uses: ./.github/workflows/excel_csv.yml
+          # Add any necessary inputs for excel_csv.yml here
+          with:
+          # Specify if excel_csv.yml requires any inputs
 
-      - name: Run automate.yml
-        run: |
-          python dannerlac.py
-
-      - name: Commit and Push Downloaded File
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Downloads/
-          git commit -m "Add downloaded file"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
-
-  excel_csv:
-    name: Excel CSV Job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install Dependencies
-        run: pip install pandas openpyxl
-
-      - name: Run excel_csv.yml
-        run: |
-          python dannerlac_data_editor.py
-
-      - name: Commit and Push Downloaded File
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Downloads/
-          git commit -m "Add downloaded file"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
-
-  flxpoint:
-    name: Flxpoint Job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run flxpoint.yml
-        run: |
-          python flxpoint.py
-
-      - name: Commit and Push Archive File
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Archive/
-          git commit -m "Add archive downloaded file"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
-
-      - name: Commit and Push Downloaded File
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add Downloads/
-          git commit -m "Clear downloaded file"
-          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
+        # Step 3: Run flxpoint.yml only after excel_csv.yml completes
+        - name: Run flxpoint.yml
+          if: success() # Only run if the previous step (excel_csv.yml) was successful
+          uses: ./.github/workflows/flxpoint.yml
+          # Add any necessary inputs for flxpoint.yml here
+          with:
+          # Specify if flxpoint.yml requires any inputs
