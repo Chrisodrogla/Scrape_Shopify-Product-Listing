@@ -1,5 +1,6 @@
 import os
 import time
+import datetime
 from selenium import webdriver
 import shutil
 
@@ -57,11 +58,19 @@ Export=driver.find_element("xpath", """//*[@id="uniqName_14_3"]/div[3]/span[2]/s
 
 time.sleep(100)
 
-# Move the downloaded file to the Downloads directory
+# Move the downloaded file to the Downloads directory and rename it
 for filename in os.listdir(downloads_directory):
     if filename.endswith('.xlsx'):  # Modify this condition based on the file type you're downloading
         source_file = os.path.join(downloads_directory, filename)
-        destination_file = os.path.join(downloads_directory, 'Downloads', filename)
+        
+        # Get today's date in MM-DD-YYYY format
+        today_date = datetime.datetime.now().strftime("%m-%d-%Y")
+        
+        # Construct the new filename
+        new_filename = f"{today_date}_DannerLaCrosseAtOnce.xlsx"
+        
+        destination_file = os.path.join(downloads_directory, new_filename)
         shutil.move(source_file, destination_file)
 
 driver.quit()
+
