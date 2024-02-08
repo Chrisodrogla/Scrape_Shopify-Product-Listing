@@ -62,3 +62,22 @@ file_input.send_keys(excel_file_path)
 
 time.sleep(50)
 driver.quit()
+
+def Updatearchive():
+    # Define the paths for the Downloads and Archive directories
+    downloads_directory = "Downloads/"
+    archive_directory = "Archive/"
+
+    # Ensure the Archive directory exists, create it if it doesn't
+    if not os.path.exists(archive_directory):
+        os.makedirs(archive_directory)
+
+    # Move all CSV and XLSX files from Downloads to Archive
+    for filename in os.listdir(downloads_directory):
+        if filename.endswith(('.csv', '.xlsx')):
+            source_file = os.path.join(downloads_directory, filename)
+            destination_file = os.path.join(archive_directory, filename)
+            shutil.move(source_file, destination_file)
+
+# Call the function to update the archive
+Updatearchive()

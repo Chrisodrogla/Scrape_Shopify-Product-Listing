@@ -27,4 +27,10 @@ jobs:
           FLX_PASSWORD_SECRET: ${{ secrets.FLX_PASSWORD_SECRET }}
         run: python flxpoint.py
 
-
+      - name: Commit and Push Downloaded File
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add Downloads/  # Assuming the downloaded file is in the Downloads directory
+          git commit -m "Add downloaded file"
+          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
