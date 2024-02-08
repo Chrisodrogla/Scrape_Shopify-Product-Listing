@@ -23,7 +23,7 @@ jobs:
 
       - name: Run automate.yml
         run: |
-          python automate.py
+          python dannerlac.py
 
       - name: Commit and Push Downloaded File
         run: |
@@ -50,7 +50,7 @@ jobs:
 
       - name: Run excel_csv.yml
         run: |
-          python excel_csv.py
+          python dannerlac_data_editor.py
 
       - name: Commit and Push Downloaded File
         run: |
