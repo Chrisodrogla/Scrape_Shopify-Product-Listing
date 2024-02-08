@@ -6,28 +6,25 @@ jobs:
   run_automate:
     runs-on: ubuntu-latest
     steps:
-      - name: Run automate.yml
+      - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Run automate.yml
-        uses: ./.github/workflows/automate.yml
-        # Add any additional setup or environment variables needed
+
+      # Add steps specific to automate.yml here
 
   run_excel_csv:
     needs: run_automate
     runs-on: ubuntu-latest
     steps:
-      - name: Run excel_csv.yml
+      - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Run excel_csv.yml
-        uses: ./.github/workflows/excel_csv.yml
-        # Add any additional setup or environment variables needed
+
+      # Add steps specific to excel_csv.yml here
 
   run_flxpoint:
     needs: run_excel_csv
     runs-on: ubuntu-latest
     steps:
-      - name: Run flxpoint.yml
+      - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Run flxpoint.yml
-        uses: ./.github/workflows/flxpoint.yml
-        # Add any additional setup or environment variables needed
+
+      # Add steps specific to flxpoint.yml here
