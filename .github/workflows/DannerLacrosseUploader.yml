@@ -1,0 +1,32 @@
+name: Danner_Lacrosse_Uploader
+
+on:
+  workflow_dispatch:
+
+  jobs:
+    orchestrate:
+      runs-on: ubuntu-latest
+
+      steps:
+        # Step 1: Run automate.yml
+        - name: Run automate.yml
+          uses: ./.github/workflows/automate.yml
+          # Add any necessary inputs for automate.yml here
+          with:
+          # Specify if automate.yml requires any inputs
+
+        # Step 2: Run excel_csv.yml only after automate.yml completes
+        - name: Run excel_csv.yml
+          if: success() # Only run if the previous step (automate.yml) was successful
+          uses: ./.github/workflows/excel_csv.yml
+          # Add any necessary inputs for excel_csv.yml here
+          with:
+          # Specify if excel_csv.yml requires any inputs
+
+        # Step 3: Run flxpoint.yml only after excel_csv.yml completes
+        - name: Run flxpoint.yml
+          if: success() # Only run if the previous step (excel_csv.yml) was successful
+          uses: ./.github/workflows/flxpoint.yml
+          # Add any necessary inputs for flxpoint.yml here
+          with:
+          # Specify if flxpoint.yml requires any inputs
