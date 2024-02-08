@@ -1,7 +1,7 @@
 import os
 import shutil
 
-def Updatearchive():
+def copy_to_archive():
     # Define the paths for the Downloads and Archive directories
     downloads_directory = "Downloads/"
     archive_directory = "Archive/"
@@ -21,15 +21,7 @@ def Updatearchive():
             except Exception as e:
                 print(f"Error copying {filename}: {e}")
 
-    # Delete all CSV and XLSX files from Downloads
-    for filename in os.listdir(downloads_directory):
-        if filename.endswith(('.csv', '.xlsx')):
-            file_path = os.path.join(downloads_directory, filename)
-            try:
-                os.remove(file_path)
-                print(f"Deleted {filename} from Downloads")
-            except Exception as e:
-                print(f"Error deleting {filename} from Downloads: {e}")
 
-# Call the function to update the archive
-Updatearchive()
+# Call the function to copy files from Downloads to Archive
+copy_to_archive()
+
