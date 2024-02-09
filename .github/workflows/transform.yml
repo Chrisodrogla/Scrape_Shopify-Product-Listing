@@ -1,7 +1,9 @@
 name: Transform
 
 on:
-  workflow_dispatch:
+  schedule:
+    # Run at 10:50 AM UTC every day
+    - cron: "50 10 * * *"
 
 jobs:
   modify_data:
