@@ -1,7 +1,9 @@
 name: Danner&Lacrosse Upload
 
 on:
-  workflow_dispatch: # This event triggers the workflow manually
+  schedule:
+    # Run at 11:25 AM UTC every day
+    - cron: "40 11 * * *"
 
 
 jobs:
