@@ -1,7 +1,9 @@
 name: Transform
 
 on:
-  workflow_dispatch: # This event triggers the workflow manually
+  schedule:
+    # Run at 10:30 AM UTC every day
+    - cron: "30 10 * * *"
 
 jobs:
   modify_data:
