@@ -2,8 +2,8 @@ name: Gather Data
 
 on:
   schedule:
-    # Run at 10:40 AM UTC every day
-    - cron: "40 10 * * *"
+    # Run at 11:25 AM UTC every day
+    - cron: "25 11 * * *"
 
 
 jobs:
