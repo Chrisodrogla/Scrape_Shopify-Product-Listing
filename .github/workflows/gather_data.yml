@@ -1,9 +1,8 @@
 name: Gather Data
 
 on:
-  schedule:
-    # Run at 11:25 AM UTC every day
-    - cron: "25 11 * * *"
+  workflow_dispatch: # This event triggers the workflow manually
+
 
 
 jobs:
