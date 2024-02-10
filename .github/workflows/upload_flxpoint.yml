@@ -3,7 +3,7 @@ name: Danner&Lacrosse Upload
 on:
   schedule:
     # Run at 11:25 AM UTC every day
-    - cron: "40 11 * * *"
+    - cron: "55 11 * * *"
 
 
 jobs:
