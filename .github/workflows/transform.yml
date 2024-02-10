@@ -3,7 +3,7 @@ name: Transform
 on:
   schedule:
     # Run at 11:25 AM UTC every day
-    - cron: "35 11 * * *"
+    - cron: "45 11 * * *"
 
 jobs:
   modify_data:
