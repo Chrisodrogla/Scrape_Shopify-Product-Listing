@@ -12,7 +12,7 @@ driver.get(Overall_Links)
 chrome_options = Options()
 chrome_options.add_argument('--headless')
 
-limit = 3  ################# Change this to None to collect all Eg. None ######################
+limit = None  ################# Change this to None to collect all Eg. None ######################
 
 links = driver.find_elements("xpath", "//li[@class='item product product-item']/a")
 if limit is not None:
