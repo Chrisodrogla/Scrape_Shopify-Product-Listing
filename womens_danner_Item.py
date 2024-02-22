@@ -4,14 +4,15 @@ from selenium.webdriver.chrome.options import Options
 import time
 import re
 
-Overall_Links = "https://www.danner.com/men/all-footwear?sortId=product-family&stock_status%5B%5D=1&stock_status%5B%5D=0"
+Overall_Links = "https://www.danner.com/women/all-footwear?sortId=product-family&stock_status%5B%5D=1&stock_status%5B%5D=0"
 driver = webdriver.Chrome()
 driver.maximize_window()
 time.sleep(2)
 driver.get(Overall_Links)
 chrome_options = Options()
 chrome_options.add_argument('--headless')
-limit = None  ################# Change this to None to collect all Eg. None ######################
+
+limit = 3  ################# Change this to None to collect all Eg. None ######################
 
 links = driver.find_elements("xpath", "//li[@class='item product product-item']/a")
 if limit is not None:
@@ -22,13 +23,12 @@ websites = [link.get_attribute("href") for link in links]
 driver.quit()
 
 all_data = []
-start_time = time.time()
-for website in websites:
 
+for website in websites:
     driver = webdriver.Chrome(options=chrome_options)
     driver.get(website)
 
-    handle1 = website.replace("https://www.danner.com/men/all-footwear/", "")
+    handle1 = website.replace("https://www.danner.com/women/all-footwear/", "")
     handle2 = handle1.split(".html")[0]
 
     # Check if "danner" is already present in handle2
@@ -112,10 +112,10 @@ for website in websites:
 
     try:
         width1 = driver.find_element("xpath", """//*[@id="attribute593"]/option[2]""").text
-        width2 = width1.replace("Men's ", "")
+        width2 = width1.replace("Women's ", "")
         Width_Value = width2.split(" -")[0]
     except:
-        Width_Value = " "
+        Width_Value = "N/A"
 
     Option3_Name = "Width"
 
@@ -356,11 +356,4 @@ for website in websites:
 # Convert the list of dictionaries to a DataFrame
 df = pd.DataFrame(all_data)
 
-
-df.to_csv('Overall_Danner_Products.csv', index=False)
-
-end_time = time.time()
-execution_time = end_time - start_time
-
-print("Execution time:", execution_time, "seconds")
-print("Execution time:", execution_time / 60, "minutes")
+df.to_csv('Womens_Danner_Products.csv', index=False)
