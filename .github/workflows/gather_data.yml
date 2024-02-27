@@ -1,9 +1,11 @@
 name: Gather Data
-
 on:
-  schedule:
-    # Run at 10:00 AM UTC every day
-    - cron: "0 10 * * *"
+  workflow_dispatch:
+
+# on:
+#   schedule:
+#     # Run at 10:00 AM UTC every day
+#     - cron: "0 10 * * *"
 
 jobs:
   run_script:
