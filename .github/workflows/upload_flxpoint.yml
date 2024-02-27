@@ -1,9 +1,13 @@
 name: Danner&Lacrosse Upload
 
 on:
-  schedule:
-    # Run at 10:30 AM UTC every day
-    - cron: "45 10 * * *"
+  workflow_dispatch:
+
+# on:
+#   schedule:
+#     # Run at 10:30 AM UTC every day
+#     - cron: "45 10 * * *"
+
 jobs:
   run_script:
     runs-on: ubuntu-latest
