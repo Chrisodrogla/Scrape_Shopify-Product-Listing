@@ -16,23 +16,29 @@ if excel_file_path is None:
     print("No Excel file found in the directory.")
     exit()
 
-# Read the Excel file, treating Color Code column as strings
-df = pd.read_excel(excel_file_path, dtype={'Color Code': str})
+# Read the Excel file
+df = pd.read_excel(excel_file_path)
 
 # Modify Quantity Available column to remove the sign
 df['Quantity Available'] = df['Quantity Available'].astype(str).str.replace('+', '')
 
 # Handle missing values by replacing them with empty strings
 df['Style Number'] = df['Style Number'].fillna('')
-df['Color Code'] = df['Color Code'].fillna('').astype(str)  # Ensure Color Code is treated as string/text
+df['Color Code'] = df['Color Code'].fillna('')
 df['Size'] = df['Size'].fillna('')
 df['Alt Size'] = df['Alt Size'].fillna('')
 
-# Add a new column "New SKU"
-df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'] + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
+# Determine the maximum length of color codes
+max_length = df['Color Code'].astype(str).map(len).max()
 
-# Save the DataFrame as a CSV file, treating Color Code column as text
+# Apply formatting to ensure all color codes have leading zeros to match the maximum length
+df['Color Code'] = df['Color Code'].astype(str).apply(lambda x: '{:0>{width}}'.format(x, width=max_length))
+
+# Add a new column "New SKU"
+df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'].astype(str) + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
+
+# Save the DataFrame as a CSV file with the Color Code column formatted
 csv_file_path = os.path.splitext(excel_file_path)[0] + ".csv"
-df.to_csv(csv_file_path, index=False, dtype={'Color Code': str})
+df.to_csv(csv_file_path, index=False)
 
 print("CSV file saved successfully.")
