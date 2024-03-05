@@ -28,6 +28,12 @@ df['Color Code'] = df['Color Code'].fillna('')
 df['Size'] = df['Size'].fillna('')
 df['Alt Size'] = df['Alt Size'].fillna('')
 
+# Determine the maximum length of color codes
+max_length = df['Color Code'].astype(str).map(len).max()
+
+# Apply formatting to ensure all color codes have leading zeros to match the maximum length
+df['Color Code'] = df['Color Code'].apply(lambda x: '{:0>{width}}'.format(x, width=max_length))
+
 # Add a new column "New SKU"
 df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'].astype(str) + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
 
