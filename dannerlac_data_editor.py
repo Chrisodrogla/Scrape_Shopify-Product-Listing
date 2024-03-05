@@ -24,7 +24,7 @@ df['Quantity Available'] = df['Quantity Available'].astype(str).str.replace('+',
 
 # Handle missing values by replacing them with empty strings
 df['Style Number'] = df['Style Number'].fillna('')
-df['Color Code'] = df['Color Code'].fillna('')
+
 df['Size'] = df['Size'].fillna('')
 df['Alt Size'] = df['Alt Size'].fillna('')
 
@@ -35,7 +35,7 @@ max_length = df['Color Code'].astype(str).map(len).max()
 df['Color Code'] = df['Color Code'].astype(str).apply(lambda x: '{:0>{width}}'.format(x, width=max_length))
 
 # Add a new column "New SKU"
-df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'].astype(str) + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
+df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'] + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
 
 # Save the DataFrame as a CSV file with the Color Code column formatted
 csv_file_path = os.path.splitext(excel_file_path)[0] + ".csv"
