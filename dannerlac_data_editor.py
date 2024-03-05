@@ -24,20 +24,14 @@ df['Quantity Available'] = df['Quantity Available'].astype(str).str.replace('+',
 
 # Handle missing values by replacing them with empty strings
 df['Style Number'] = df['Style Number'].fillna('')
-df['Color Code'] = df['Color Code'].fillna('')
+df['Color Code'] = df['Color Code'].fillna('').astype(str)  # Ensure Color Code is treated as string/text
 df['Size'] = df['Size'].fillna('')
 df['Alt Size'] = df['Alt Size'].fillna('')
 
-# Determine the maximum length of color codes
-max_length = df['Color Code'].astype(str).map(len).max()
+# Add a new column "New SKU"
+df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'] + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
 
-# Apply formatting to ensure all color codes have leading zeros to match the maximum length
-df['Color Code'] = df['Color Code'].apply(lambda x: '{:0>{width}}'.format(x, width=max_length))
-
-# Update the "New SKU" column to reflect the modified "Color Code"
-df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'].astype(str) + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
-
-# Save the modified DataFrame as a CSV file
+# Save the DataFrame as a CSV file
 csv_file_path = os.path.splitext(excel_file_path)[0] + ".csv"
 df.to_csv(csv_file_path, index=False)
 
