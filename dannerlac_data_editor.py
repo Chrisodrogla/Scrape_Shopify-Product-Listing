@@ -18,8 +18,7 @@ if excel_file_path is None:
 
 # Read the Excel file
 df = pd.read_excel(excel_file_path)
-# Apply formatting to ensure all color codes have leading zeros to match the maximum length
-df['Color Code'] = df['Color Code'].apply(lambda x: '{:0>{width}}'.format(x, width=max_length))
+
 # Modify Quantity Available column to remove the sign
 df['Quantity Available'] = df['Quantity Available'].astype(str).str.replace('+', '')
 
@@ -43,5 +42,3 @@ csv_file_path = os.path.splitext(excel_file_path)[0] + ".csv"
 df.to_csv(csv_file_path, index=False)
 
 print("CSV file saved successfully.")
-
-
