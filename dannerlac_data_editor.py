@@ -17,22 +17,21 @@ if excel_file_path is None:
     exit()
 
 # Read the Excel file
-df = pd.read_excel(excel_file_path)
+df = pd.read_excel(excel_file_path, dtype={'Color Code': str})  # Explicitly specify Color Code column as string type
 
 # Modify Quantity Available column to remove the sign
 df['Quantity Available'] = df['Quantity Available'].astype(str).str.replace('+', '')
 
 # Handle missing values by replacing them with empty strings
 df['Style Number'] = df['Style Number'].fillna('')
-df['Color Code'] = df['Color Code'].fillna('').astype(str)  # Treat Color Code as string type
 df['Size'] = df['Size'].fillna('')
 df['Alt Size'] = df['Alt Size'].fillna('')
 
 # Determine the maximum length of color codes
-max_length = df['Color Code'].map(len).max()
+max_length = df['Color Code'].astype(str).map(len).max()
 
 # Apply formatting to ensure all color codes have leading zeros to match the maximum length
-df['Color Code'] = df['Color Code'].apply(lambda x: '{:0>{width}}'.format(x, width=max_length))
+df['Color Code'] = df['Color Code'].astype(str).apply(lambda x: '{:0>{width}}'.format(x, width=max_length))
 
 # Add a new column "New SKU"
 df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'] + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
