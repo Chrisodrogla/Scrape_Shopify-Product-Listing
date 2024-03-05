@@ -34,11 +34,8 @@ max_length = df['Color Code'].astype(str).map(len).max()
 # Apply formatting to ensure all color codes have leading zeros to match the maximum length
 df['Color Code'] = df['Color Code'].apply(lambda x: '{:0>{width}}'.format(x, width=max_length))
 
-# Add a new column "New SKU"
-df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'].astype(str) + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
+# Save only the "Color Code" column to a CSV file
+csv_file_path = os.path.splitext(excel_file_path)[0] + "_color_codes.csv"
+df['Color Code'].to_csv(csv_file_path, index=False, header=['Color Code'])
 
-# Save the DataFrame as a CSV file
-csv_file_path = os.path.splitext(excel_file_path)[0] + ".csv"
-df.to_csv(csv_file_path, index=False)
-
-print("CSV file saved successfully.")
+print("Color Code CSV file saved successfully.")
