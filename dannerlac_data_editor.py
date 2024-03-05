@@ -18,7 +18,8 @@ if excel_file_path is None:
 
 # Read the Excel file
 df = pd.read_excel(excel_file_path)
-
+# Apply formatting to ensure all color codes have leading zeros to match the maximum length
+df['Color Code'] = df['Color Code'].apply(lambda x: '{:0>{width}}'.format(x, width=max_length))
 # Modify Quantity Available column to remove the sign
 df['Quantity Available'] = df['Quantity Available'].astype(str).str.replace('+', '')
 
@@ -37,8 +38,10 @@ df['Color Code'] = df['Color Code'].apply(lambda x: '{:0>{width}}'.format(x, wid
 # Add a new column "New SKU"
 df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'].astype(str) + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
 
-# Save the DataFrame as a CSV file with the Color Code column formatted the same as in "New SKU"
+# Save the DataFrame as a CSV file
 csv_file_path = os.path.splitext(excel_file_path)[0] + ".csv"
-df[['Style Number', 'Color Code', 'Size', 'Alt Size']].to_csv(csv_file_path, index=False)
+df.to_csv(csv_file_path, index=False)
 
 print("CSV file saved successfully.")
+
+
