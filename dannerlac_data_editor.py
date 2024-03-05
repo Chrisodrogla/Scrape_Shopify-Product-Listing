@@ -28,14 +28,16 @@ df['Color Code'] = df['Color Code'].fillna('')
 df['Size'] = df['Size'].fillna('')
 df['Alt Size'] = df['Alt Size'].fillna('')
 
-# Add leading zeros to Color Code to match the maximum length of New SKU
-max_length = df['New SKU'].str.extract(r'-(\d+)-').astype(str).map(len).max()
+# Determine the maximum length of color codes
+max_length = df['Color Code'].astype(str).map(len).max()
+
+# Apply formatting to ensure all color codes have leading zeros to match the maximum length
 df['Color Code'] = df['Color Code'].apply(lambda x: '{:0>{width}}'.format(x, width=max_length))
 
 # Add a new column "New SKU"
 df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'].astype(str) + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
 
-# Save the DataFrame as a CSV file
+# Save the DataFrame as a CSV file with the Color Code column formatted
 csv_file_path = os.path.splitext(excel_file_path)[0] + ".csv"
 df.to_csv(csv_file_path, index=False)
 
