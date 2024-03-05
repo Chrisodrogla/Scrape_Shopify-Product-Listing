@@ -37,8 +37,8 @@ df['Color Code'] = df['Color Code'].apply(lambda x: '{:0>{width}}'.format(x, wid
 # Add a new column "New SKU"
 df['New SKU'] = df['Style Number'].astype(str) + "-" + df['Color Code'].astype(str) + "-" + df['Size'].astype(str) + df['Alt Size'].astype(str)
 
-# Save the DataFrame as a CSV file with the Color Code column formatted
+# Save the DataFrame as a CSV file with the Color Code column formatted the same as in "New SKU"
 csv_file_path = os.path.splitext(excel_file_path)[0] + ".csv"
-df.to_csv(csv_file_path, index=False)
+df[['Style Number', 'Color Code', 'Size', 'Alt Size']].to_csv(csv_file_path, index=False)
 
 print("CSV file saved successfully.")
