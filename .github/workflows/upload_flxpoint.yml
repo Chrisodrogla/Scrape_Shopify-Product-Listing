@@ -4,6 +4,7 @@ name: Danner&Lacrosse Upload
 #   workflow_dispatch:
 
 on:
+  workflow_dispatch:
   schedule:
     # Run at 10:30 AM UTC every day
     - cron: "45 10 * * *"
