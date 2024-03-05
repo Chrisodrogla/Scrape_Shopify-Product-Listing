@@ -16,8 +16,8 @@ if excel_file_path is None:
     print("No Excel file found in the directory.")
     exit()
 
-# Read the Excel file
-df = pd.read_excel(excel_file_path)
+# Read the Excel file, treating Color Code column as strings
+df = pd.read_excel(excel_file_path, dtype={'Color Code': str})
 
 # Modify Quantity Available column to remove the sign
 df['Quantity Available'] = df['Quantity Available'].astype(str).str.replace('+', '')
