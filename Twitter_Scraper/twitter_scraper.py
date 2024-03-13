@@ -129,6 +129,10 @@ for link in User_Links:
 
 df = pd.DataFrame({'User': following_list, 'User_Link': acc_link})
 
+repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
+
+# Define the downloads directory within the repository
+downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
 
 
 # Specify the directory path
