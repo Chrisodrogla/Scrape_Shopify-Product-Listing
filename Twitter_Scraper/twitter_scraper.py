@@ -16,23 +16,26 @@ repo_directory = os.getcwd()  # This gets the current working directory (your re
 # Define the downloads directory within the repository
 downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
 
+def initialize_driver(extension_path):
+    options = webdriver.ChromeOptions()
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920x1080")
+    options.add_argument("--display=:99") 
+    options.add_extension(extension_path)
+    return webdriver.Chrome(options=options)
+
 # Path to the downloaded extension .crx file
-extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
-Login = "https://twitter.com/i/flow/login?newtwitter=true"
+extension_path = 'JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
 
-# Define Chrome options
-chrome_options = Options()
+# Create WebDriver instance with Chrome options and extension
+driver = initialize_driver(extension_path)
 
-# Add the extension to Chrome options
-chrome_options.add_extension(extension_path)
-
-
-# Create WebDriver instance with Chrome options
-driver = webdriver.Chrome(options=chrome_options)
-
-# Your code goes here
+# Navigate to the login page
 Login = "https://twitter.com/i/flow/login?newtwitter=true"
 driver.get(Login)
+
 
 
 username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input""")))
