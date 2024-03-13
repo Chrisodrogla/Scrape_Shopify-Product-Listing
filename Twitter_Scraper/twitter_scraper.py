@@ -27,7 +27,7 @@ if not os.path.exists(downloads_directory):
 website = 'https://twitter.com/i/flow/login?newtwitter=true'
 
 # Define the path to the Chrome extension
-extension_path = 'https://twitter.com/i/flow/login?newtwitter=true'
+extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
 
 # Set up Chrome WebDriver with custom download directory and extension
 options = webdriver.ChromeOptions()
