@@ -16,6 +16,7 @@ repo_directory = os.getcwd()  # This gets the current working directory (your re
 # Define the downloads directory within the repository
 downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
 
+time.sleep(5)
 # Path to the downloaded extension .crx file
 extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
 Login = "https://twitter.com/i/flow/login?newtwitter=true"
@@ -42,7 +43,7 @@ options.add_argument(f"--load-extension={extension_path}")
 driver = webdriver.Chrome(options=options)
 
 driver.get(Login)
-
+time.sleep(5)
 username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input""")))
 
 username_input.send_keys(username)
@@ -84,7 +85,7 @@ def scroll_to_bottom(driver):
 
 # Call the function to scroll down
 scroll_to_bottom(driver)
-
+time.sleep(5)
 User_Name = driver.find_elements("xpath", "//div[@class='user-item-text']/span[1]")
 User_Mail = driver.find_elements("xpath", "//div[@class='user-item-text']/span[2]")
 
@@ -95,7 +96,7 @@ Followers = zip(User_Name, User_Mail)
 
 following_list = []
 acc_link = []
-
+time.sleep(5)
 
 for user_name, user_mail in Followers:
     formatted_user = f"{user_name.text} ({user_mail.text})"
@@ -110,14 +111,14 @@ df = pd.DataFrame({'User': following_list, 'User_Link': acc_link})
 
 # Specify the directory path
 directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
-
+time.sleep(5)
 # Create the directory if it doesn't exist
 os.makedirs(directory, exist_ok=True)
 
 # Generate filename based on current date and time
 current_time = datetime.now().strftime("%m-%d-%Y-%H-%M")
 filename = os.path.join(directory, f"{current_time}.json")
-
+time.sleep(5)
 # Save the DataFrame to JSON file with indentation and proper formatting
 df.to_json(filename, orient='records', indent=4)
 
