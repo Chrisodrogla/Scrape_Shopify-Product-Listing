@@ -17,7 +17,8 @@ email = 'christopherchan645@gmail.com'
 # Define the repository directory
 repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
 
-
+# Define the downloads directory within the repository
+downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
 
 website = 'https://twitter.com/i/flow/login?newtwitter=true'
 
@@ -32,6 +33,12 @@ options.add_argument("--no-sandbox")
 options.add_argument("--disable-gpu")
 options.add_argument("--window-size=1920x1080")
 options.add_argument(f"--load-extension={extension_path}")  # Add the extension
+options.add_experimental_option("prefs", {
+    "download.default_directory": downloads_directory,  # Set the download directory to the Downloads directory
+    "download.prompt_for_download": False,
+    "download.directory_upgrade": True,
+    "safebrowsing.enabled": True
+})
 
 driver = webdriver.Chrome(options=options)
 driver.get(website)
