@@ -19,7 +19,7 @@ password = os.environ['TWTR_USER_PASS']
 
 email = 'christopherchan645@gmail.com'
 Login = "https://twitter.com/i/flow/login?newtwitter=true"
-extension_path = 'JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
+extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
 
 options = webdriver.ChromeOptions()
 
