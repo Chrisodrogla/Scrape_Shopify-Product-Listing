@@ -1,37 +1,45 @@
-
+import os
+import time
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+import pandas as pd
+from datetime import datetime, timedelta
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
-import pandas as pd
-import os
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, \
+    ElementClickInterceptedException, TimeoutException
+
+
+from selenium.webdriver.chrome.options import Options
 from datetime import datetime
 import shutil
 
-# username = os.environ['TWTR_USER_NAME']
-# password = os.environ['TWTR_USER_PASS']
-
 username = os.environ['TWTR_USER_NAME']
 password = os.environ['TWTR_USER_PASS']
-
 email = 'christopherchan645@gmail.com'
 
-# Path to the downloaded extension .crx file
-extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
-
-# Define Chrome options
-chrome_options = Options()
-
-# Add the extension to Chrome options
-chrome_options.add_extension(extension_path)
-
-# Create WebDriver instance with Chrome options
-driver = webdriver.Chrome(options=chrome_options)
-
-# Your code goes here
 Login = "https://twitter.com/i/flow/login?newtwitter=true"
+
+options = webdriver.ChromeOptions()
+
+# Add additional options to use the display created by Xvfb
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--disable-gpu")
+options.add_argument("--window-size=1920x1080")
+options.add_argument("--display=:99")  # Set display to Xvfb
+
+# Path to your Chrome extension CRX file
+# extension_path = 'JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
+extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
+# Add the extension to the options
+options.add_extension(extension_path)
+
+
+
+driver = webdriver.Chrome(options=options)
 driver.get(Login)
+time.sleep(5)
 
 username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input""")))
 
