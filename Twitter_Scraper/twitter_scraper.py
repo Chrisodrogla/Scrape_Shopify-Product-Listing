@@ -3,6 +3,11 @@ import time
 import datetime
 from selenium import webdriver
 import shutil
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import pandas as pd
+import os
+from datetime import datetime
 
 # Get secrets from environment variables
 username = os.environ['TWTR_USER_NAME']
