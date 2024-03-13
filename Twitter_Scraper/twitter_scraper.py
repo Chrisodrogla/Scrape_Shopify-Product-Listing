@@ -14,26 +14,34 @@ password = os.environ['TWTR_USER_PASS']
 repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
 
 # Define the downloads directory within the repository
+# Define the downloads directory within the repository
 downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
-
-def initialize_driver(extension_path):
-    options = webdriver.ChromeOptions()
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--window-size=1920x1080")
-    options.add_argument("--display=:99") 
-    options.add_extension(extension_path)
-    return webdriver.Chrome(options=options)
 
 # Path to the downloaded extension .crx file
 extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
-
-# Create WebDriver instance with Chrome options and extension
-driver = initialize_driver(extension_path)
-
-# Navigate to the login page
 Login = "https://twitter.com/i/flow/login?newtwitter=true"
+
+# Set up Chrome WebDriver with custom download directory
+options = webdriver.ChromeOptions()
+
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-gpu")
+options.add_argument("--window-size=1920x1080")
+options.add_argument("--display=:99") 
+
+# Define Chrome options
+chrome_options = webdriver.ChromeOptions()
+
+# Add the extension to Chrome options
+chrome_options.add_extension(extension_path)
+
+# Merge Chrome options
+options.add_argument(f"--load-extension={extension_path}")
+
+# Create WebDriver instance with merged Chrome options
+driver = webdriver.Chrome(options=options)
+
 driver.get(Login)
 
 
