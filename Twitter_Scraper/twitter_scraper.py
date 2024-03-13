@@ -14,7 +14,6 @@ password = os.environ['TWTR_USER_PASS']
 repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
 
 # Define the downloads directory within the repository
-# Define the downloads directory within the repository
 downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
 
 # Path to the downloaded extension .crx file
@@ -23,12 +22,12 @@ Login = "https://twitter.com/i/flow/login?newtwitter=true"
 
 # Set up Chrome WebDriver with custom download directory
 options = webdriver.ChromeOptions()
-
+options.add_argument("--headless")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-gpu")
 options.add_argument("--window-size=1920x1080")
-options.add_argument("--display=:99") 
+
 
 # Define Chrome options
 chrome_options = webdriver.ChromeOptions()
@@ -44,8 +43,6 @@ driver = webdriver.Chrome(options=options)
 
 driver.get(Login)
 
-
-
 username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input""")))
 
 username_input.send_keys(username)
@@ -60,10 +57,10 @@ password_input.send_keys(password)
 login_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div""")))
 login_button.click()
 
-time.sleep(4)
+time.sleep(5)
 main_twitter = "https://twitter.com/gotbit_io/following"
 driver.get(main_twitter)
-time.sleep(2)
+time.sleep(5)
 
 def scroll_to_bottom(driver):
     # Get the height of the current page
