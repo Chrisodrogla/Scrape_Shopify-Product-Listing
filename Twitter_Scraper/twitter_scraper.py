@@ -12,17 +12,12 @@ from datetime import datetime
 # Get secrets from environment variables
 username = os.environ['TWTR_USER_NAME']
 password = os.environ['TWTR_USER_PASS']
-
+email = 'christopherchan645@gmail.com'
 
 # Define the repository directory
 repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
 
-# Define the downloads directory within the repository
-downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
 
-# Ensure the Downloads directory exists, create it if it doesn't
-if not os.path.exists(downloads_directory):
-    os.makedirs(downloads_directory)
 
 website = 'https://twitter.com/i/flow/login?newtwitter=true'
 
@@ -31,18 +26,12 @@ extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
 
 # Set up Chrome WebDriver with custom download directory and extension
 options = webdriver.ChromeOptions()
-options.add_argument("--headless")
+# options.add_argument("--headless")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-gpu")
 options.add_argument("--window-size=1920x1080")
 options.add_argument(f"--load-extension={extension_path}")  # Add the extension
-options.add_experimental_option("prefs", {
-    "download.default_directory": downloads_directory,  # Set the download directory to the Downloads directory
-    "download.prompt_for_download": False,
-    "download.directory_upgrade": True,
-    "safebrowsing.enabled": True
-})
 
 driver = webdriver.Chrome(options=options)
 driver.get(website)
@@ -62,6 +51,20 @@ password_input.send_keys(password)
 
 login_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div""")))
 login_button.click()
+
+time.sleep(3)
+
+try:
+    
+    email_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//input[@autocomplete='email']""")))
+
+    email_input.send_keys(email)
+    time.sleep(3)
+
+    login_button2 = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div/div/div/div""")))
+    login_button2.click() 
+except:
+    pass
 
 time.sleep(4)
 main_twitter = "https://twitter.com/gotbit_io/following"
