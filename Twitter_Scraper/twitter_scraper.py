@@ -20,26 +20,42 @@ email = 'christopherchan645@gmail.com'
 
 Login = "https://twitter.com/i/flow/login?newtwitter=true"
 
-options = webdriver.ChromeOptions()
+repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
 
-# Add additional options to use the display created by Xvfb
-options.add_argument("--no-sandbox")
+# Define the downloads directory within the repository
+downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
+
+# Path to the downloaded extension .crx file
+extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
+Login = "https://twitter.com/i/flow/login?newtwitter=true"
+
+# Set up Chrome WebDriver with custom download directory
+options = webdriver.ChromeOptions()
+options.add_argument("--headless")
 options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--no-sandbox")
 options.add_argument("--disable-gpu")
 options.add_argument("--window-size=1920x1080")
-options.add_argument("--display=:99")  # Set display to Xvfb
+options.add_experimental_option("prefs", {
+    "download.default_directory": downloads_directory,  # Set the download directory to the Downloads directory
+    "download.prompt_for_download": False,
+    "download.directory_upgrade": True,
+    "safebrowsing.enabled": True
+})
 
-# Path to your Chrome extension CRX file
-# extension_path = 'JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
-extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
-# Add the extension to the options
-options.add_extension(extension_path)
+# Define Chrome options
+chrome_options = webdriver.ChromeOptions()
 
+# Add the extension to Chrome options
+chrome_options.add_extension(extension_path)
 
+# Merge Chrome options
+options.add_argument(f"--load-extension={extension_path}")
 
+# Create WebDriver instance with merged Chrome options
 driver = webdriver.Chrome(options=options)
+
 driver.get(Login)
-time.sleep(5)
 
 username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input""")))
 
