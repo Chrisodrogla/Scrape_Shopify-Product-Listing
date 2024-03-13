@@ -1,0 +1,39 @@
+name: X Twitter Scraper
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Run at 10:00 AM UTC every day
+    - cron: "0 10 * * *"
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Python Script
+        env:
+          TWTR_USER_NAME: ${{ secrets.TWTR_USER_NAME }}
+          TWTR_USER_PASS: ${{ secrets.TWTR_USER_PASS }}
+        run: python Twitter_Scraper/twitter_scraper.py
+
+      - name: Commit and Push Downloaded File
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add Twitter_Scraper/Daily_Data/  # Assuming the downloaded file is in this
+          git commit -m "Add downloaded file"
+          git push https://${{ secrets.GH_PAT }}@github.com/Chrisodrogla/Scrape_Shopify-Product-Listing.git
