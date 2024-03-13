@@ -27,7 +27,7 @@ def initialize_driver(extension_path):
     return webdriver.Chrome(options=options)
 
 # Path to the downloaded extension .crx file
-extension_path = 'JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
+extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
 
 # Create WebDriver instance with Chrome options and extension
 driver = initialize_driver(extension_path)
