@@ -129,6 +129,8 @@ for link in User_Links:
 
 df = pd.DataFrame({'User': following_list, 'User_Link': acc_link})
 
+
+
 # Specify the directory path
 directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
 
