@@ -25,14 +25,15 @@ website = 'https://twitter.com/i/flow/login?newtwitter=true'
 # Define the path to the Chrome extension
 extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
 
-# Set up Chrome WebDriver with custom download directory and extension
+Login = "https://twitter.com/i/flow/login?newtwitter=true"
+
+# Set up Chrome WebDriver with custom download directory
 options = webdriver.ChromeOptions()
-# options.add_argument("--headless")
+options.add_argument("--headless")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-gpu")
 options.add_argument("--window-size=1920x1080")
-options.add_argument(f"--load-extension={extension_path}")  # Add the extension
 options.add_experimental_option("prefs", {
     "download.default_directory": downloads_directory,  # Set the download directory to the Downloads directory
     "download.prompt_for_download": False,
@@ -40,9 +41,19 @@ options.add_experimental_option("prefs", {
     "safebrowsing.enabled": True
 })
 
+# Define Chrome options
+chrome_options = webdriver.ChromeOptions()
+
+# Add the extension to Chrome options
+chrome_options.add_extension(extension_path)
+
+# Merge Chrome options
+options.add_argument(f"--load-extension={extension_path}")
+
+# Create WebDriver instance with merged Chrome options
 driver = webdriver.Chrome(options=options)
-driver.get(website)
-time.sleep(5)
+
+driver.get(Login)
 
 
 username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input""")))
