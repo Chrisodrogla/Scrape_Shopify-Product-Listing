@@ -84,6 +84,7 @@ try:
 except:
     pass
 
-print(driver.page_source)
+Myname = driver.find_element("xpath", """//*[@id="user-name"]""").text
+print(Myname )
 
 driver.quit()
