@@ -89,10 +89,10 @@ def scrape_following():
 
     scroll_to_bottom(driver)
 
-    # Find user names, emails, and links
-    user_names = driver.find_elements_by_xpath("//div[@class='user-item-text']/span[1]")
-    user_mails = driver.find_elements_by_xpath("//div[@class='user-item-text']/span[2]")
-    user_links = driver.find_elements_by_xpath("//a[@class='user-item-link']")
+
+    user_names = driver.find_elements("xpath", "//div[@class='user-item-text']/span[1]")
+    user_mails = driver.find_elements("xpath", "//div[@class='user-item-text']/span[2]")
+    user_links = driver.find_elements("xpath", "//a[@class='user-item-link']")
 
     following_list = []
     acc_link = []
