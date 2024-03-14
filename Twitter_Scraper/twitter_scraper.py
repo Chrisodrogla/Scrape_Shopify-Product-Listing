@@ -24,12 +24,6 @@ options.add_argument("--display=:99")  # Set display to Xvfb
 # Initialize Chrome WebDriver
 driver = webdriver.Chrome(options=options)
 
-
-
-
-
-
-
 # Function to add Chrome extension
 
 driver.get("https://chromewebstore.google.com/detail/old-twitter-layout-2024/jgejdcdoeeabklepnkdbglgccjpdgpmf")
