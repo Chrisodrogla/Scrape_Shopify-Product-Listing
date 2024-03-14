@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "pro-course-388221",
+  "private_key_id": "0a1e15f868e500fd4a979a20f9a0be77ea4b3d4a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCaRK+TVK2fcKM8\nXoTU2KeDerkIPZd/0nQPio0BQ78SZn/gxYI3M67ZvGJ4grt78TepecmmTsWc/iJ3\nrOnbumJOSZUn3uIK8vTQQ1qRqkmkf++3dVy4YB+XgxRZ5Zitya3PmvyPPxlIrkjY\neegxFeP9ktpwlifK3UVxlWMzT+b9ypjmUIPTkRTtEwd0aFHflO1mAzudnWP279S2\n+NCJBQxP8USdNijPMYL/FDIUnZCO1psfFRCBF2asrf2fy97KlHqnU2CHFX/yLCUt\nFEddWWCJI6CArlnOZkE1chwDP6mhqVnV//09z1IG2Z4LinHNsT4cRpJgI+exHSc1\n/aptY7pLAgMBAAECggEALEi9UgDD2noeEc1cOjF7XM3U4d20aLgEIxX1xkApUGHm\nIaLw72HBtrVSWx/ELB8hiF/yl/AS4C8/u7UCaNYHNEwBKjHcF6KIzmQXUqtceoFT\nUgm5tR+60eaJ6Ah1nKXBZFAsYf6OBoQpWyMbmUOccAVA+YLRJ3X/Ykys7mTofT/C\nACiTm0La3i0uUUNHJTfgKjEjLtqqO/C9kqdetocO/AljhU9TaXRjMWR8zWDW6v61\nhPqi1ZSsRepr48SqhWSoo0wEhbcCZab9VPVq5mdbWzS/uR1bqOt/DS8itaDX4e2g\nabVZbmcl7IeLfx13IE/gmfZC7NmL7HXv+Mq9Oq1K2QKBgQDSNkiBTlNqRsJ0RGci\nvMvoea17/ghPar5XZ2TkYpr8VZi5Ggh6+YmsrDu5PYJ9oP29Ir5b1UxzOP+aa3/t\n2e0nhxCWWyCq8ZipAGO6u71f5txS1do9Przuf07XeKudFZRu3/sBHE60AyTG9qo7\nwteNFPoZBE4ajtTQb3ZCORbhzwKBgQC73ubS9s3BfxVVlG8uuIzhyZO2ZcQC/8pS\nvaoHo4oWd6q6NEiZQ0t8tPX4fr4oOi1j/2lyKu92UmaxEIBFqQVMZ4rROV3CQWy7\nFVCvhgzr9M6oxaljAQY4/1gbh/w/yHAqcxcbuypQNeYEiRzQ7WBQE5Mc2kjGbN4n\nI5FvgYQqxQKBgQChCL6gd/1E0/IRGXmczd6zN8tjyiZZmF86G9XZc4RhO71kR4Ip\nmtIR+ltCO9GkJdlbs6r6NLt9JTQB+sokzqZzem+Fj0fGTI/zH35GxZ18QyGTP4oR\nEuevGM2wGRv2mVp9WY4yupm8IxBgbwPYBhoUVPaGhZrDk5mKF2kTsCJMVwKBgQCg\n534GfX8oFHHvRBwdhc6TqxOqCmrgrrdYOj0gIb8pEwDUTedH7M0AV/S7CcJPrdQm\nayCiuYcybcyqJhnWj7aMA7pvC5TzxRkc+lqKmmMCzD8baX9z3fK4amnJ2qP+9Oqs\nULof9CN/Y0pH5C8b+dKdgsZi1cmyuJdkKiBrwh+yiQKBgQCO8f8+mrp5jiExVQy/\nCawYDw2iSnlsf+tUdxAp7DnhyYWkYSU1CnUPABqV1Mp70LdFMDpDovoTagw2otZu\nJHz8RZxESS1LC+/f9stPx/kKk4wWoCbm5iBQ9nP2ZD+UkglBiNGcTTOJtYBWUWkB\nA+pJp/SbWrYsBiIomzmup10vFQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "twitchan@pro-course-388221.iam.gserviceaccount.com",
+  "client_id": "114749173777099056549",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/twitchan%40pro-course-388221.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
