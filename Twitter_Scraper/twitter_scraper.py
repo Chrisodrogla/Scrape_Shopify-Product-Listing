@@ -19,23 +19,38 @@ password = os.environ['TWTR_USER_PASS']
 
 email = 'christopherchan645@gmail.com'
 Login = "https://twitter.com/i/flow/login?newtwitter=true"
+
+
+
+
 extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
 
-options = webdriver.ChromeOptions()
+# options = webdriver.ChromeOptions()
 
-# Add additional options to use the display created by Xvfb
-options.add_argument("--headless")
+# # Add additional options to use the display created by Xvfb
+# options.add_argument("--headless")
 
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
-options.add_argument("--disable-gpu")
-options.add_argument("--window-size=1920x1080")
-options.add_argument("--display=:99")  # Set display to Xvfb
+# options.add_argument("--no-sandbox")
+# options.add_argument("--disable-dev-shm-usage")
+# options.add_argument("--disable-gpu")
+# options.add_argument("--window-size=1920x1080")
+# options.add_argument("--display=:99")  # Set display to Xvfb
 
-# Add extension
-options.add_extension(extension_path)
+# # Add extension
+# options.add_extension(extension_path)
 
-driver = webdriver.Chrome(options=options)
+# driver = webdriver.Chrome(options=options)
+chrome_options = Options()
+chrome_options.add_extension(extension_path)
+chrome_options.add_argument('--headless')  # Run Chrome in headless mode
+
+# Initialize Chrome WebDriver
+driver = webdriver.Chrome(options=chrome_options)
+
+
+
+
+
 driver.get(Login)
 time.sleep(5)
 
