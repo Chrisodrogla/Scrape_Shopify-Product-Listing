@@ -21,11 +21,12 @@ jobs:
 
       - name: Install Chrome WebDriver
         run: |
-          LATEST=$(wget -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
-          wget http://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip
+          VERSION="122.0.6261.128"
+          wget "http://chromedriver.storage.googleapis.com/$VERSION/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
           chmod +x chromedriver
           sudo mv chromedriver /usr/local/bin
+
 
             
 
