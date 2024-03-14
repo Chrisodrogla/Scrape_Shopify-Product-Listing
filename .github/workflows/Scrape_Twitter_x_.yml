@@ -24,11 +24,20 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install XVFB and other dependencies
+        run: |
+          sudo apt-get install xvfb
+          pip install .
+
       - name: Run Python Script
         env:
           TWTR_USER_NAME: ${{ secrets.TWTR_USER_NAME }}
           TWTR_USER_PASS: ${{ secrets.TWTR_USER_PASS }}
         run: python Twitter_Scraper/twitter_scraper.py
+
+      - name: Run tests
+        run: |
+          xvfb-run -a -s "-screen 0 640x480x8" python -m unittest discover -s tests
 
       - name: Commit and Push Downloaded File
         run: |
