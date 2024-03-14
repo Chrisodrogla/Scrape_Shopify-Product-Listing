@@ -73,10 +73,25 @@ except:
 
 time.sleep(10)
 
-Myname = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="user-name""")))
 
-Myname1 = Myname.text
-print(Myname1)
+
+
+
+
+# Myname = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="user-name""")))
+
+# Myname1 = Myname.text
+# print(Myname1)
+
+element = driver.find_element("xpath", """//*[@id="react-root"]/div/div/div[2]/header/div/div/div/div[2]/div/div/div/div/div[2]/div/div[2]/div/div/div[3]/div/div[2]/div/img""")
+text = element.get_attribute('alt')
+
+# Print the extracted text
+print(text)
+
+
+
+
 
 # time.sleep(4)
 # main_twitter = "https://twitter.com/gotbit_io/following"
