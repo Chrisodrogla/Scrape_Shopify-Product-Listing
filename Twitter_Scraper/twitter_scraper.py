@@ -73,79 +73,79 @@ except:
 
 time.sleep(10)
 
-# Myname = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="user-name""")))
-#
-# Myname1 = Myname.text
-# print(Myname1)
+Myname = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="user-name""")))
 
-time.sleep(4)
-main_twitter = "https://twitter.com/gotbit_io/following"
-driver.get(main_twitter)
-time.sleep(2)
+Myname1 = Myname.text
+print(Myname1)
 
-def scroll_to_bottom(driver):
-    # Get the height of the current page
-    last_height = driver.execute_script("return document.body.scrollHeight")
+# time.sleep(4)
+# main_twitter = "https://twitter.com/gotbit_io/following"
+# driver.get(main_twitter)
+# time.sleep(2)
 
-    while True:
-        # Scroll down to the bottom
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+# def scroll_to_bottom(driver):
+#     # Get the height of the current page
+#     last_height = driver.execute_script("return document.body.scrollHeight")
 
-        # Wait for some time to load content
-        time.sleep(4)
+#     while True:
+#         # Scroll down to the bottom
+#         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-        # Calculate new height after scrolling
-        new_height = driver.execute_script("return document.body.scrollHeight")
+#         # Wait for some time to load content
+#         time.sleep(4)
 
-        # If the height doesn't change, then we've reached the bottom
-        if new_height == last_height:
-            break
+#         # Calculate new height after scrolling
+#         new_height = driver.execute_script("return document.body.scrollHeight")
 
-        last_height = new_height
+#         # If the height doesn't change, then we've reached the bottom
+#         if new_height == last_height:
+#             break
 
-# Call the function to scroll down
-scroll_to_bottom(driver)
+#         last_height = new_height
 
-User_Name = driver.find_elements("xpath", "//div[@class='user-item-text']/span[1]")
-User_Mail = driver.find_elements("xpath", "//div[@class='user-item-text']/span[2]")
+# # Call the function to scroll down
+# scroll_to_bottom(driver)
 
-User_Links = driver.find_elements("xpath", "//a[@class='user-item-link']")
+# User_Name = driver.find_elements("xpath", "//div[@class='user-item-text']/span[1]")
+# User_Mail = driver.find_elements("xpath", "//div[@class='user-item-text']/span[2]")
 
-# Concatenate the two lists
-Followers = zip(User_Name, User_Mail)
+# User_Links = driver.find_elements("xpath", "//a[@class='user-item-link']")
 
-following_list = []
-acc_link = []
+# # Concatenate the two lists
+# Followers = zip(User_Name, User_Mail)
 
-
-for user_name, user_mail in Followers:
-    formatted_user = f"{user_name.text} ({user_mail.text})"
-    following_list.append(formatted_user)
+# following_list = []
+# acc_link = []
 
 
-for link in User_Links:
-    userl = link.get_attribute('href')
-    acc_link.append(userl)
-
-df = pd.DataFrame({'User': following_list, 'User_Link': acc_link})
-
-repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
-
-# Define the downloads directory within the repository
-downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
+# for user_name, user_mail in Followers:
+#     formatted_user = f"{user_name.text} ({user_mail.text})"
+#     following_list.append(formatted_user)
 
 
-# Specify the directory path
-directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
+# for link in User_Links:
+#     userl = link.get_attribute('href')
+#     acc_link.append(userl)
 
-# Create the directory if it doesn't exist
-os.makedirs(directory, exist_ok=True)
+# df = pd.DataFrame({'User': following_list, 'User_Link': acc_link})
 
-# Generate filename based on current date and time
-current_time = datetime.now().strftime("%m-%d-%Y-%H-%M")
-filename = os.path.join(directory, f"{current_time}.json")
+# repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
 
-# Save the DataFrame to JSON file with indentation and proper formatting
-df.to_json(filename, orient='records', indent=4)
+# # Define the downloads directory within the repository
+# downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
 
-driver.quit()
+
+# # Specify the directory path
+# directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
+
+# # Create the directory if it doesn't exist
+# os.makedirs(directory, exist_ok=True)
+
+# # Generate filename based on current date and time
+# current_time = datetime.now().strftime("%m-%d-%Y-%H-%M")
+# filename = os.path.join(directory, f"{current_time}.json")
+
+# # Save the DataFrame to JSON file with indentation and proper formatting
+# df.to_json(filename, orient='records', indent=4)
+
+# driver.quit()
