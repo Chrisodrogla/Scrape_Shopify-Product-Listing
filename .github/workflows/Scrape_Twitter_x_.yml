@@ -19,6 +19,15 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Install Chrome WebDriver
+        run: |
+          LATEST=$(wget -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+          wget http://chromedriver.storage.googleapis.com/$LATEST/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          chmod +x chromedriver
+          sudo mv chromedriver /usr/local/bin
+            
+
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
