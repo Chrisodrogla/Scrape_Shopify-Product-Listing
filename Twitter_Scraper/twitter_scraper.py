@@ -80,6 +80,46 @@ driver = webdriver.Chrome(options=options)
 
 ######################################################   ###########   ####################
 driver.get(flx)
+time.sleep(10)
+username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath",
+                                                                                 """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input""")))
+
+username_input.send_keys(username)
+
+next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
+                                                                          """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[6]/div""")))
+next_button.click()
+
+password_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath",
+                                                                                 """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div/div[3]/div/label/div/div[2]/div[1]/input""")))
+
+password_input.send_keys(password)
+
+login_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
+                                                                           """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div""")))
+login_button.click()
+
+time.sleep(3)
+try:
+    email_input = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located(("xpath", """//input[@autocomplete='email']""")))
+
+    email_input.send_keys(email)
+    time.sleep(3)
+
+    login_button2 = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
+                                                                                """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div/div/div/div""")))
+    login_button2.click()
+except:
+    pass
+
+time.sleep(10)
+
+# Myname = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="user-name""")))
+#
+# Myname1 = Myname.text
+# print(Myname1)
+
 
 # Print the entire HTML content of the webpage
 print(driver.page_source)
