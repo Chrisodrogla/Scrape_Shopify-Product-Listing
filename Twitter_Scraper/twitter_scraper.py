@@ -1,240 +1,81 @@
 import os
-import time
-# import pyautogui
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import shutil
-from selenium.webdriver.common.keys import Keys
-
-username = os.environ['TWTR_USER_NAME']
-password = os.environ['TWTR_USER_PASS']
-email = 'christopherchan645@gmail.com'
-
-flx = "https://twitter.com/i/flow/login?newtwitter=true"
+import json
+import pandas as pd
+from datetime import datetime, timedelta
+from oauth2client.service_account import ServiceAccountCredentials
+import gspread
 
 
-# Set up Chrome WebDriver with custom download directory and extension
-options = webdriver.ChromeOptions()
+# Step 1: Reading the JSON files and comparing the most recent and second most recent ones
 
-# options.add_argument("--headless")
-options.add_argument("--disable-dev-shm-usage")
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-gpu")
-options.add_argument("--window-size=1920x1080")
+def read_json_files(folder_path):
+    json_files = os.listdir(folder_path)
+    json_files.sort(reverse=True)  # Sort files by date, most recent first
+    most_recent_file = json_files[0]
+    second_most_recent_file = json_files[1]
+    
+    with open(os.path.join(folder_path, most_recent_file), 'r') as f:
+        most_recent_data = json.load(f)
+    
+    with open(os.path.join(folder_path, second_most_recent_file), 'r') as f:
+        second_most_recent_data = json.load(f)
+    
+    return most_recent_data, second_most_recent_data
 
-options.add_extension('Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx')  # Add extension
+# Step 2: Creating dataframes for "Followed Added", "Follow Removed", and "Overall"
 
-# Initialize Chrome WebDriver
-driver = webdriver.Chrome(options=options)
+def create_dataframes(most_recent_data, second_most_recent_data):
+    most_recent_df = pd.DataFrame(most_recent_data)
+    second_most_recent_df = pd.DataFrame(second_most_recent_data)
+    
+    followed_added_df = pd.DataFrame(columns=['User', 'User_Link'])
+    followed_removed_df = pd.DataFrame(columns=['User', 'User_Link'])
+    
+    for index, row in second_most_recent_df.iterrows():
+        if row['User'] not in most_recent_df['User'].values or row['User_Link'] not in most_recent_df['User_Link'].values:
+            followed_removed_df = followed_removed_df.append(row, ignore_index=True)
+    
+    for index, row in most_recent_df.iterrows():
+        if row['User'] not in second_most_recent_df['User'].values or row['User_Link'] not in second_most_recent_df['User_Link'].values:
+            followed_added_df = followed_added_df.append(row, ignore_index=True)
+    
+    overall_df = most_recent_df.copy()
+    
+    return followed_added_df, followed_removed_df, overall_df
 
-# Navigate to the URL
-# driver.get("https://twitter.com/i/flow/login?newtwitter=true")
+# Step 3: Integrating Google Sheets API to push data into Google Sheets
 
-# Add additional code here for interacting with the webpage as needed
+def push_to_google_sheets(dataframe, sheet_name, timestamp):
+    # Step 3: Load Service Account Credentials
+    creds = ServiceAccountCredentials.from_json_keyfile_name('Twitter_Scraper/')
+    
+    # Step 4: Authorize with Google Sheets API
+    client = gspread.authorize(creds)
+    
+    # Step 5: Access the Google Sheet
+    sheet = client.open("Your Google Sheet Name").worksheet(sheet_name)
+    
+    # Step 6: Convert DataFrame to List of Lists
+    data = dataframe.values.tolist()
+    
+    # Step 7: Update the Google Sheet
+    sheet.append_row(["Data for " + timestamp])  # Add timestamp as header
+    sheet.append_rows(data)  # Append data to the Google Sheet
 
-
-
-
-# username = os.environ['TWTR_USER_NAME']
-# password = os.environ['TWTR_USER_PASS']
-# email = 'christopherchan645@gmail.com'
-
-# flx = "https://twitter.com/i/flow/login?newtwitter=true"
-
-# # Set up Chrome WebDriver with custom download directory
-# options = webdriver.ChromeOptions()
-# options.add_argument("--no-sandbox")
-# options.add_argument("--disable-dev-shm-usage")
-# options.add_argument("--disable-gpu")
-# options.add_argument("--window-size=1920x1080")
-# options.add_argument("--display=:99")  # Set display to Xvfb
-
-# # Initialize Chrome WebDriver
-# driver = webdriver.Chrome(options=options)
-
-
-
-
-
-
-
-# # Function to add Chrome extension
-
-# driver.get("https://chromewebstore.google.com/detail/old-twitter-layout-2024/jgejdcdoeeabklepnkdbglgccjpdgpmf")
-# time.sleep(3)  # Wait for the page to load
-
-# next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
-#                                                                           """//*[@id="yDmH0d"]/c-wiz/div/div/main/div/section[1]/section/div[2]/div/button/span[6]""")))
-# next_button.click()
-# #
-# time.sleep(1)  # Add a small delay to ensure the button click action is completed
-# pyautogui.press('tab')
-# time.sleep(1)
-# pyautogui.press('tab')
-# time.sleep(1)
-# pyautogui.press('enter')
-
-# time.sleep(5)
-
-######################################################   ###########   ####################
-driver.get(flx)
-time.sleep(10)
-username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath",
-                                                                                 """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input""")))
-
-username_input.send_keys(username)
-
-next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
-                                                                          """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[6]/div""")))
-next_button.click()
-
-password_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath",
-                                                                                 """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div/div[3]/div/label/div/div[2]/div[1]/input""")))
-
-password_input.send_keys(password)
-
-login_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
-                                                                           """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div""")))
-login_button.click()
-
-time.sleep(3)
-try:
-    email_input = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located(("xpath", """//input[@autocomplete='email']""")))
-
-    email_input.send_keys(email)
-    time.sleep(3)
-
-    login_button2 = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
-                                                                                """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div/div/div/div""")))
-    login_button2.click()
-except:
     pass
 
-time.sleep(10)
+# Step 4: Automating the process
 
-# Myname = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="user-name""")))
-#
-# Myname1 = Myname.text
-# print(Myname1)
+def main():
+    folder_path = "Twitter_Scraper/Daily_Data"
+    most_recent_data, second_most_recent_data = read_json_files(folder_path)
+    followed_added_df, followed_removed_df, overall_df = create_dataframes(most_recent_data, second_most_recent_data)
+    
+    # Push data to Google Sheets
+    timestamp = datetime.now().strftime("%m-%d-%Y at %I:%M %p CST")
+    push_to_google_sheets(followed_added_df, "Follow Added", timestamp)
+    push_to_google_sheets(followed_removed_df, "Follow Removed", timestamp)
+    push_to_google_sheets(overall_df, "Overall", timestamp)
 
-
-# Print the entire HTML content of the webpage
-print(driver.page_source)
-
-# Close the WebDriver session
-driver.quit()
-
-
-# username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath",
-#                                                                                  """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input""")))
-
-# username_input.send_keys(username)
-
-# next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
-#                                                                           """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[6]/div""")))
-# next_button.click()
-
-# password_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath",
-#                                                                                  """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div/div[3]/div/label/div/div[2]/div[1]/input""")))
-
-# password_input.send_keys(password)
-
-# login_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
-#                                                                            """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div""")))
-# login_button.click()
-
-# time.sleep(3)
-# try:
-#     email_input = WebDriverWait(driver, 10).until(
-#         EC.presence_of_element_located(("xpath", """//input[@autocomplete='email']""")))
-
-#     email_input.send_keys(email)
-#     time.sleep(3)
-
-#     login_button2 = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
-#                                                                                 """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div/div/div/div""")))
-#     login_button2.click()
-# except:
-#     pass
-
-# time.sleep(10)
-
-# # Myname = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="user-name""")))
-# #
-# # Myname1 = Myname.text
-# # print(Myname1)
-
-# time.sleep(4)
-# main_twitter = "https://twitter.com/gotbit_io/following"
-# driver.get(main_twitter)
-# time.sleep(4)
-
-# def scroll_to_bottom(driver):
-#     # Get the height of the current page
-#     last_height = driver.execute_script("return document.body.scrollHeight")
-
-#     while True:
-#         # Scroll down to the bottom
-#         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-#         # Wait for some time to load content
-#         time.sleep(4)
-
-#         # Calculate new height after scrolling
-#         new_height = driver.execute_script("return document.body.scrollHeight")
-
-#         # If the height doesn't change, then we've reached the bottom
-#         if new_height == last_height:
-#             break
-
-#         last_height = new_height
-
-# # Call the function to scroll down
-# scroll_to_bottom(driver)
-
-# User_Name = driver.find_elements("xpath", "//div[@class='user-item-text']/span[1]")
-# User_Mail = driver.find_elements("xpath", "//div[@class='user-item-text']/span[2]")
-
-# User_Links = driver.find_elements("xpath", "//a[@class='user-item-link']")
-
-# # Concatenate the two lists
-# Followers = zip(User_Name, User_Mail)
-
-# following_list = []
-# acc_link = []
-
-
-# for user_name, user_mail in Followers:
-#     formatted_user = f"{user_name.text} ({user_mail.text})"
-#     following_list.append(formatted_user)
-
-
-# for link in User_Links:
-#     userl = link.get_attribute('href')
-#     acc_link.append(userl)
-
-# df = pd.DataFrame({'User': following_list, 'User_Link': acc_link})
-
-# repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
-
-# # Define the downloads directory within the repository
-# downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
-
-
-# # Specify the directory path
-# directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
-
-# # Create the directory if it doesn't exist
-# os.makedirs(directory, exist_ok=True)
-
-# # Generate filename based on current date and time
-# current_time = datetime.now().strftime("%m-%d-%Y-%H-%M")
-# filename = os.path.join(directory, f"{current_time}.json")
-
-# # Save the DataFrame to JSON file with indentation and proper formatting
-# df.to_json(filename, orient='records', indent=4)
-
-# driver.quit()
+if __name__ == "__main__":
+    main()
