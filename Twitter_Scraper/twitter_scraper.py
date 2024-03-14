@@ -20,7 +20,7 @@ options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--disable-gpu")
 options.add_argument("--window-size=1920x1080")
 options.add_argument("--display=:99")  # Set display to Xvfb
-
+options.add_argument("--headless")  # Run in headless mode
 # Initialize Chrome WebDriver
 driver = webdriver.Chrome(options=options)
 
