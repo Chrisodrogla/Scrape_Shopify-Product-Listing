@@ -24,7 +24,7 @@ options.add_argument("--no-sandbox")
 options.add_argument("--disable-gpu")
 options.add_argument("--window-size=1920x1080")
 
-# options.add_extension('Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx')  # Add extension
+options.add_extension('Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx')  # Add extension
 
 # Initialize Chrome WebDriver
 driver = webdriver.Chrome(options=options)
