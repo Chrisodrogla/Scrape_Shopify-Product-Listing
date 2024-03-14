@@ -16,6 +16,9 @@ import shutil
 username = os.environ['TWTR_USER_NAME']
 password = os.environ['TWTR_USER_PASS']
 
+username = 'ChristianA82895'
+
+password = 'pabiboko09'
 
 email = 'christopherchan645@gmail.com'
 Login = "https://twitter.com/i/flow/login?newtwitter=true"
@@ -78,10 +81,10 @@ time.sleep(10)
 
 
 
-# Myname = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="user-name""")))
+Myname = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="user-name""")))
 
-# Myname1 = Myname.text
-# print(Myname1)
+Myname1 = Myname.text
+print(Myname1)
 
 element = driver.find_element("xpath", """//*[@id="react-root"]/div/div/div[2]/header/div/div/div/div[2]/div/div/div/div/div[2]/div/div[2]/div/div/div[3]/div/div[2]/div/img""")
 text = element.get_attribute('alt')
