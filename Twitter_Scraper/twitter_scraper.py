@@ -16,9 +16,6 @@ import shutil
 username = os.environ['TWTR_USER_NAME']
 password = os.environ['TWTR_USER_PASS']
 
-username = 'ChristianA82895'
-
-password = 'pabiboko09'
 
 email = 'christopherchan645@gmail.com'
 Login = "https://twitter.com/i/flow/login?newtwitter=true"
