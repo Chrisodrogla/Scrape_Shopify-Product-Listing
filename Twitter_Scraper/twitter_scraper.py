@@ -1,6 +1,6 @@
 import os
 import time
-from pynput.keyboard import Controller, Key
+import pyautogui
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -39,16 +39,12 @@ next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath
                                                                           """//*[@id="yDmH0d"]/c-wiz/div/div/main/div/section[1]/section/div[2]/div/button/span[6]""")))
 next_button.click()
 #
-keyboard = Controller()
 time.sleep(1)  # Add a small delay to ensure the button click action is completed
-keyboard.press(Key.tab)
-keyboard.release(Key.tab)
-time.sleep(1)  # Add a small delay between key presses
-keyboard.press(Key.tab)
-keyboard.release(Key.tab)
-time.sleep(1)  # Add a small delay between key presses
-keyboard.press(Key.enter)
-keyboard.release(Key.enter)
+pyautogui.press('tab')
+time.sleep(1)
+pyautogui.press('tab')
+time.sleep(1)
+pyautogui.press('enter')
 
 time.sleep(5)
 
