@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import shutil
+from selenium.webdriver.common.keys import Keys
 
 username = os.environ['TWTR_USER_NAME']
 password = os.environ['TWTR_USER_PASS']
@@ -13,34 +14,25 @@ email = 'christopherchan645@gmail.com'
 
 flx = "https://twitter.com/i/flow/login?newtwitter=true"
 
-# Set up Chrome WebDriver with custom download directory
+
+
+# Set up Chrome WebDriver with custom download directory and extension
 options = webdriver.ChromeOptions()
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--disable-gpu")
 options.add_argument("--window-size=1920x1080")
 options.add_argument("--display=:99")  # Set display to Xvfb
+options.add_extension('Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx')  # Add extension
 
 # Initialize Chrome WebDriver
 driver = webdriver.Chrome(options=options)
 
-# Function to add Chrome extension
+# Navigate to the URL
+# driver.get("https://twitter.com/i/flow/login?newtwitter=true")
 
-driver.get("https://chromewebstore.google.com/detail/old-twitter-layout-2024/jgejdcdoeeabklepnkdbglgccjpdgpmf")
-time.sleep(3)  # Wait for the page to load
+# Add additional code here for interacting with the webpage as needed
 
-next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
-                                                                          """//*[@id="yDmH0d"]/c-wiz/div/div/main/div/section[1]/section/div[2]/div/button/span[6]""")))
-next_button.click()
-#
-time.sleep(1)  # Add a small delay to ensure the button click action is completed
-pyautogui.press('tab')
-time.sleep(1)
-pyautogui.press('tab')
-time.sleep(1)
-pyautogui.press('enter')
-
-time.sleep(5)  # Wait for 5 seconds
 
 
 
