@@ -1,58 +1,60 @@
 import os
 import time
+from pynput.keyboard import Controller, Key
 from selenium import webdriver
-import pandas as pd
-from datetime import datetime, timedelta
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, \
-    ElementClickInterceptedException, TimeoutException
-
-from selenium.webdriver.chrome.options import Options
-from datetime import datetime
 import shutil
 
 username = os.environ['TWTR_USER_NAME']
 password = os.environ['TWTR_USER_PASS']
-
-
 email = 'christopherchan645@gmail.com'
-Login = "https://twitter.com/i/flow/login?newtwitter=true"
 
+flx = "https://twitter.com/i/flow/login?newtwitter=true"
 
+# Set up Chrome WebDriver with custom download directory
+options = webdriver.ChromeOptions()
+options.add_argument("--disable-dev-shm-usage")
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-gpu")
+options.add_argument("--window-size=1920x1080")
 
-
-extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
-
-# options = webdriver.ChromeOptions()
-
-# # Add additional options to use the display created by Xvfb
-# options.add_argument("--headless")
-
-# options.add_argument("--no-sandbox")
-# options.add_argument("--disable-dev-shm-usage")
-# options.add_argument("--disable-gpu")
-# options.add_argument("--window-size=1920x1080")
-# options.add_argument("--display=:99")  # Set display to Xvfb
-
-# # Add extension
-# options.add_extension(extension_path)
-
-# driver = webdriver.Chrome(options=options)
-chrome_options = Options()
-chrome_options.add_extension(extension_path)
-chrome_options.add_argument('--headless')  # Run Chrome in headless mode
 
 # Initialize Chrome WebDriver
-driver = webdriver.Chrome(options=chrome_options)
+driver = webdriver.Chrome(options=options)
 
 
 
 
 
-driver.get(Login)
+
+
+# Function to add Chrome extension
+
+driver.get("https://chromewebstore.google.com/detail/old-twitter-layout-2024/jgejdcdoeeabklepnkdbglgccjpdgpmf")
+time.sleep(3)  # Wait for the page to load
+
+next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
+                                                                          """//*[@id="yDmH0d"]/c-wiz/div/div/main/div/section[1]/section/div[2]/div/button/span[6]""")))
+next_button.click()
+#
+keyboard = Controller()
+time.sleep(1)  # Add a small delay to ensure the button click action is completed
+keyboard.press(Key.tab)
+keyboard.release(Key.tab)
+time.sleep(1)  # Add a small delay between key presses
+keyboard.press(Key.tab)
+keyboard.release(Key.tab)
+time.sleep(1)  # Add a small delay between key presses
+keyboard.press(Key.enter)
+keyboard.release(Key.enter)
+
 time.sleep(5)
+
+
+driver.get(flx)
+
 
 username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath",
                                                                                  """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input""")))
@@ -88,95 +90,79 @@ except:
 
 time.sleep(10)
 
+# Myname = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="user-name""")))
+#
+# Myname1 = Myname.text
+# print(Myname1)
+
+time.sleep(4)
+main_twitter = "https://twitter.com/gotbit_io/following"
+driver.get(main_twitter)
+time.sleep(4)
+
+def scroll_to_bottom(driver):
+    # Get the height of the current page
+    last_height = driver.execute_script("return document.body.scrollHeight")
+
+    while True:
+        # Scroll down to the bottom
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+        # Wait for some time to load content
+        time.sleep(4)
+
+        # Calculate new height after scrolling
+        new_height = driver.execute_script("return document.body.scrollHeight")
+
+        # If the height doesn't change, then we've reached the bottom
+        if new_height == last_height:
+            break
+
+        last_height = new_height
+
+# Call the function to scroll down
+scroll_to_bottom(driver)
+
+User_Name = driver.find_elements("xpath", "//div[@class='user-item-text']/span[1]")
+User_Mail = driver.find_elements("xpath", "//div[@class='user-item-text']/span[2]")
+
+User_Links = driver.find_elements("xpath", "//a[@class='user-item-link']")
+
+# Concatenate the two lists
+Followers = zip(User_Name, User_Mail)
+
+following_list = []
+acc_link = []
 
 
+for user_name, user_mail in Followers:
+    formatted_user = f"{user_name.text} ({user_mail.text})"
+    following_list.append(formatted_user)
 
 
+for link in User_Links:
+    userl = link.get_attribute('href')
+    acc_link.append(userl)
+
+df = pd.DataFrame({'User': following_list, 'User_Link': acc_link})
+
+repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
+
+# Define the downloads directory within the repository
+downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
 
 
+# Specify the directory path
+directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
 
-# element = driver.find_element("xpath", """//*[@id="react-root"]/div/div/div[2]/header/div/div/div/div[2]/div/div/div/div/div[2]/div/div[2]/div/div/div[3]/div/div[2]/div/img""")
-# text = element.get_attribute('alt')
+# Create the directory if it doesn't exist
+os.makedirs(directory, exist_ok=True)
 
-# # Print the extracted text
-# print(text)
+# Generate filename based on current date and time
+current_time = datetime.now().strftime("%m-%d-%Y-%H-%M")
+filename = os.path.join(directory, f"{current_time}.json")
 
-Myname = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="user-name""")))
+# Save the DataFrame to JSON file with indentation and proper formatting
+df.to_json(filename, orient='records', indent=4)
 
-Myname1 = Myname.text
-print(Myname1)
-
-
-
-
-# time.sleep(4)
-# main_twitter = "https://twitter.com/gotbit_io/following"
-# driver.get(main_twitter)
-# time.sleep(2)
-
-# def scroll_to_bottom(driver):
-#     # Get the height of the current page
-#     last_height = driver.execute_script("return document.body.scrollHeight")
-
-#     while True:
-#         # Scroll down to the bottom
-#         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-#         # Wait for some time to load content
-#         time.sleep(4)
-
-#         # Calculate new height after scrolling
-#         new_height = driver.execute_script("return document.body.scrollHeight")
-
-#         # If the height doesn't change, then we've reached the bottom
-#         if new_height == last_height:
-#             break
-
-#         last_height = new_height
-
-# # Call the function to scroll down
-# scroll_to_bottom(driver)
-
-# User_Name = driver.find_elements("xpath", "//div[@class='user-item-text']/span[1]")
-# User_Mail = driver.find_elements("xpath", "//div[@class='user-item-text']/span[2]")
-
-# User_Links = driver.find_elements("xpath", "//a[@class='user-item-link']")
-
-# # Concatenate the two lists
-# Followers = zip(User_Name, User_Mail)
-
-# following_list = []
-# acc_link = []
-
-
-# for user_name, user_mail in Followers:
-#     formatted_user = f"{user_name.text} ({user_mail.text})"
-#     following_list.append(formatted_user)
-
-
-# for link in User_Links:
-#     userl = link.get_attribute('href')
-#     acc_link.append(userl)
-
-# df = pd.DataFrame({'User': following_list, 'User_Link': acc_link})
-
-# repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
-
-# # Define the downloads directory within the repository
-# downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
-
-
-# # Specify the directory path
-# directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
-
-# # Create the directory if it doesn't exist
-# os.makedirs(directory, exist_ok=True)
-
-# # Generate filename based on current date and time
-# current_time = datetime.now().strftime("%m-%d-%Y-%H-%M")
-# filename = os.path.join(directory, f"{current_time}.json")
-
-# # Save the DataFrame to JSON file with indentation and proper formatting
-# df.to_json(filename, orient='records', indent=4)
-
-# driver.quit()
+driver.quit()
