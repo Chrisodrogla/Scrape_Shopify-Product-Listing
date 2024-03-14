@@ -47,7 +47,7 @@ def create_dataframes(most_recent_data, second_most_recent_data):
 
 def push_to_google_sheets(dataframe, sheet_name, timestamp):
     # Step 3: Load Service Account Credentials
-    creds = ServiceAccountCredentials.from_json_keyfile_name('Twitter_Scraper/')
+    creds = ServiceAccountCredentials.from_json_keyfile_name('Twitter_Scraper/pro-course-388221-0a1e15f868e5.json')
     
     # Step 4: Authorize with Google Sheets API
     client = gspread.authorize(creds)
