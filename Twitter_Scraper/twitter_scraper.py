@@ -1,17 +1,11 @@
 import os
 import time
 import pyautogui
-from pyvirtualdisplay import Display
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
-# Start virtual display
-display = Display(visible=0, size=(1920, 1080))
-display.start()
-
-# Your script goes here
+import shutil
 
 username = os.environ['TWTR_USER_NAME']
 password = os.environ['TWTR_USER_PASS']
@@ -25,18 +19,26 @@ options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
 options.add_argument("--disable-gpu")
 options.add_argument("--window-size=1920x1080")
+options.add_argument("--display=:99")  # Set display to Xvfb
 
 # Initialize Chrome WebDriver
 driver = webdriver.Chrome(options=options)
 
+
+
+
+
+
+
 # Function to add Chrome extension
+
 driver.get("https://chromewebstore.google.com/detail/old-twitter-layout-2024/jgejdcdoeeabklepnkdbglgccjpdgpmf")
 time.sleep(3)  # Wait for the page to load
 
 next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath",
                                                                           """//*[@id="yDmH0d"]/c-wiz/div/div/main/div/section[1]/section/div[2]/div/button/span[6]""")))
 next_button.click()
-
+#
 time.sleep(1)  # Add a small delay to ensure the button click action is completed
 pyautogui.press('tab')
 time.sleep(1)
