@@ -57,11 +57,21 @@ def push_to_google_sheets(dataframe, sheet_name, timestamp):
     sheet = client.open("X Twitter Gobit Hedge Fund").worksheet(sheet_name)
     
     # Step 6: Convert DataFrame to List of Lists with Desired format
-    data = [["Data for " + timestamp, "", ""]]  # Header
-    data += dataframe.apply(lambda row: [row['User'], row['User_Link'], ""], axis=1).values.tolist()
+    data = [["Data for " + timestamp]]  # Header
+    for index, row in dataframe.iterrows():
+        data.append([row['User'], row['User_Link'], ""])
     
-    # Step 7: Update the Google Sheet
-    sheet.append_rows(data)  # Append data to the Google Sheet
+    # Flatten the list
+    flat_data = [item for sublist in data for item in sublist]
+    
+    # Step 7: Find the last column with data
+    col_num = 1
+    while sheet.cell(1, col_num).value:
+        col_num += 1
+    
+    # Step 8: Append data to the Google Sheet
+    sheet.update_cell(1, col_num, "")
+    sheet.update_cells([gspread.models.Cell(row=1, col=col_num + i, value=value) for i, value in enumerate(flat_data)])
 
     pass
 
