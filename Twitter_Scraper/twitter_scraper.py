@@ -13,34 +13,37 @@ def read_json_files(folder_path):
     json_files.sort(reverse=True)  # Sort files by date, most recent first
     most_recent_file = json_files[0]
     second_most_recent_file = json_files[1]
-    
+
     with open(os.path.join(folder_path, most_recent_file), 'r') as f:
         most_recent_data = json.load(f)
-    
+
     with open(os.path.join(folder_path, second_most_recent_file), 'r') as f:
         second_most_recent_data = json.load(f)
-    
+
     return most_recent_data, second_most_recent_data
+
 
 # Step 2: Creating dataframes for "Followed Added", "Follow Removed", and "Overall"
 
 def create_dataframes(most_recent_data, second_most_recent_data):
     most_recent_df = pd.DataFrame(most_recent_data)
     second_most_recent_df = pd.DataFrame(second_most_recent_data)
-    
+
     followed_added_df = pd.DataFrame(columns=['User', 'User_Link'])
     followed_removed_df = pd.DataFrame(columns=['User', 'User_Link'])
-    
+
     for index, row in second_most_recent_df.iterrows():
-        if row['User'] not in most_recent_df['User'].values or row['User_Link'] not in most_recent_df['User_Link'].values:
+        if row['User'] not in most_recent_df['User'].values or row['User_Link'] not in most_recent_df[
+            'User_Link'].values:
             followed_removed_df.loc[len(followed_removed_df)] = row
-    
+
     for index, row in most_recent_df.iterrows():
-        if row['User'] not in second_most_recent_df['User'].values or row['User_Link'] not in second_most_recent_df['User_Link'].values:
+        if row['User'] not in second_most_recent_df['User'].values or row['User_Link'] not in second_most_recent_df[
+            'User_Link'].values:
             followed_added_df.loc[len(followed_added_df)] = row
-    
+
     overall_df = most_recent_df.copy()
-    
+
     return followed_added_df, followed_removed_df, overall_df
 
 
@@ -56,15 +59,24 @@ def push_to_google_sheets(dataframe, sheet_name, timestamp):
     # Step 5: Access the Google Sheet
     sheet = client.open("X Twitter Gobit Hedge Fund").worksheet(sheet_name)
     
+    # Find the next empty column
+    next_empty_column = len(sheet.row_values(1)) + 1
+    
     # Step 6: Convert DataFrame to List of Lists
     data = dataframe.values.tolist()
     
-    # Step 7: Append data to the Google Sheet
-    if sheet.row_count == 1:
-        sheet.append_row(["Data for " + timestamp] * len(data))
-    sheet.append_rows(data, value_input_option='USER_ENTERED')
+    # Step 7: Update the Google Sheet
+    header = ["Data for " + timestamp]
+    sheet.update_cell(1, next_empty_column, header[0])  # Add timestamp as header
+    
+    # Update data in the next empty column
+    for i, row in enumerate(data):
+        sheet.update_cell(2 + i, next_empty_column, row[0])
+        sheet.update_cell(2 + i, next_empty_column + 1, row[1])
 
     pass
+
+
 
 # Step 4: Automating the process
 
@@ -72,12 +84,13 @@ def main():
     folder_path = "Twitter_Scraper/Daily_Data"
     most_recent_data, second_most_recent_data = read_json_files(folder_path)
     followed_added_df, followed_removed_df, overall_df = create_dataframes(most_recent_data, second_most_recent_data)
-    
+
     # Push data to Google Sheets
     timestamp = datetime.now().strftime("%m-%d-%Y at %I:%M %p CST")
     push_to_google_sheets(followed_added_df, "Follow Added", timestamp)
     push_to_google_sheets(followed_removed_df, "Follow Removed", timestamp)
     push_to_google_sheets(overall_df, "Overall", timestamp)
+
 
 if __name__ == "__main__":
     main()
