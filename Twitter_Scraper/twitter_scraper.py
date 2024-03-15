@@ -56,14 +56,21 @@ def push_to_google_sheets(dataframe, sheet_name, timestamp):
     # Step 5: Access the Google Sheet
     sheet = client.open("X Twitter Gobit Hedge Fund").worksheet(sheet_name)
     
+    # Find the last row with data
+    last_row = len(sheet.get_all_values()) + 1
+    
     # Step 6: Convert DataFrame to List of Lists
     data = dataframe.values.tolist()
     
-    # Step 7: Append data to the Google Sheet
-    if not sheet.col_values(1):
-        # If the first column is empty, add the timestamp header and data
-        sheet.append_row(["Data for " + timestamp] * (len(data[0]) + 1))
-    sheet.append_row([timestamp] + sum(data, []))
+    # Step 7: Update the Google Sheet starting from the last row
+    sheet.update(f'A{last_row}', [["Data for " + timestamp]])  # Add timestamp as header
+    sheet.update(f'B{last_row}', data[0])  # Append data to Column B
+    if len(data) > 1:
+        sheet.update(f'C{last_row}', data[1])  # Append data to Column C if available
+    if len(data) > 2:
+        sheet.update(f'D{last_row}', data[2])  # Append data to Column D if available
+
+    pass
 
 # Step 4: Automating the process
 
