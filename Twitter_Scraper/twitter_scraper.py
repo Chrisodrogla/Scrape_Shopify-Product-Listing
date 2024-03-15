@@ -27,10 +27,10 @@ def read_json_files(folder_path):
 
 def create_dataframes(most_recent_data, second_most_recent_data):
     if not most_recent_data or not second_most_recent_data:
-        # If there is no data, return dataframes with 'None' values
-        followed_added_df = pd.DataFrame({'User': [None], 'User_Link': [None]})
-        followed_removed_df = pd.DataFrame({'User': [None], 'User_Link': [None]})
-        overall_df = pd.DataFrame({'User': [None], 'User_Link': [None]})
+        # If there is no data, return dataframes with 'None' as text values
+        followed_added_df = pd.DataFrame({'User': ['None'], 'User_Link': ['None']})
+        followed_removed_df = pd.DataFrame({'User': ['None'], 'User_Link': ['None']})
+        overall_df = pd.DataFrame({'User': ['None'], 'User_Link': ['None']})
     else:
         most_recent_df = pd.DataFrame(most_recent_data)
         second_most_recent_df = pd.DataFrame(second_most_recent_data)
