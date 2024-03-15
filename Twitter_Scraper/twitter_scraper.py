@@ -59,11 +59,11 @@ def push_to_google_sheets(dataframe, sheet_name, timestamp):
     # Step 6: Convert DataFrame to List of Lists
     data = dataframe.values.tolist()
     
-    # Step 7: Update the Google Sheet
-    sheet.append_row(["Data for " + timestamp])  # Add timestamp as header
-    sheet.append_rows(data)  # Append data to the Google Sheet
-
-    pass
+    # Step 7: Append data to the Google Sheet
+    if not sheet.col_values(1):
+        # If the first column is empty, add the timestamp header and data
+        sheet.append_row(["Data for " + timestamp] * (len(data[0]) + 1))
+    sheet.append_row([timestamp] + sum(data, []))
 
 # Step 4: Automating the process
 
