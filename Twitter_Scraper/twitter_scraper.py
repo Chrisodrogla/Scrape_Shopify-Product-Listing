@@ -52,30 +52,21 @@ def create_dataframes(most_recent_data, second_most_recent_data):
 def push_to_google_sheets(dataframe, sheet_name, timestamp):
     # Step 3: Load Service Account Credentials
     creds = ServiceAccountCredentials.from_json_keyfile_name('Twitter_Scraper/pro-course-388221-0a1e15f868e5.json')
-    
+
     # Step 4: Authorize with Google Sheets API
     client = gspread.authorize(creds)
-    
+
     # Step 5: Access the Google Sheet
     sheet = client.open("X Twitter Gobit Hedge Fund").worksheet(sheet_name)
-    
-    # Find the next empty column
-    next_empty_column = len(sheet.row_values(1)) + 1
-    
+
     # Step 6: Convert DataFrame to List of Lists
     data = dataframe.values.tolist()
-    
+
     # Step 7: Update the Google Sheet
-    header = ["Data for " + timestamp]
-    sheet.update_cell(1, next_empty_column, header[0])  # Add timestamp as header
-    
-    # Update data in the next empty column
-    for i, row in enumerate(data):
-        sheet.update_cell(2 + i, next_empty_column, row[0])
-        sheet.update_cell(2 + i, next_empty_column + 1, row[1])
+    sheet.append_row(["Data for " + timestamp])  # Add timestamp as header
+    sheet.append_rows(data)  # Append data to the Google Sheet
 
     pass
-
 
 
 # Step 4: Automating the process
