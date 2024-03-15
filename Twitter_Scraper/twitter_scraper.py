@@ -1,132 +1,103 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import time
-import pandas as pd
 import os
+import json
+import pandas as pd
 from datetime import datetime
-import shutil
+from oauth2client.service_account import ServiceAccountCredentials
+import gspread
+import pytz
 
-username = os.environ['TWTR_USER_NAME']
-password = os.environ['TWTR_USER_PASS']
+# Step 1: Reading the JSON files and comparing the most recent and second most recent ones
 
-repo_directory = os.getcwd()  # This gets the current working directory (your repository directory)
+def read_json_files(folder_path):
+    json_files = os.listdir(folder_path)
+    json_files.sort(reverse=True)  # Sort files by date, most recent first
+    most_recent_file = json_files[0]
+    second_most_recent_file = json_files[1]
 
-# Define the downloads directory within the repository
-downloads_directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
+    with open(os.path.join(folder_path, most_recent_file), 'r') as f:
+        most_recent_data = json.load(f)
 
-# Path to the downloaded extension .crx file
-extension_path = 'Twitter_Scraper/JGEJDCDOEEABKLEPNKDBGLGCCJPDGPMF_1_8_2_0.crx'
-Login = "https://twitter.com/i/flow/login?newtwitter=true"
+    with open(os.path.join(folder_path, second_most_recent_file), 'r') as f:
+        second_most_recent_data = json.load(f)
 
-# Set up Chrome WebDriver with custom download directory
-options = webdriver.ChromeOptions()
-options.add_argument("--headless")
-options.add_argument("--disable-dev-shm-usage")
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-gpu")
-options.add_argument("--window-size=1920x1080")
-options.add_experimental_option("prefs", {
-    "download.default_directory": downloads_directory,  # Set the download directory to the Downloads directory
-    "download.prompt_for_download": False,
-    "download.directory_upgrade": True,
-    "safebrowsing.enabled": True
-})
-
-# Define Chrome options
-chrome_options = webdriver.ChromeOptions()
-
-# Add the extension to Chrome options
-chrome_options.add_extension(extension_path)
-
-# Merge Chrome options
-options.add_argument(f"--load-extension={extension_path}")
-
-# Create WebDriver instance with merged Chrome options
-driver = webdriver.Chrome(options=options)
-
-driver.get(Login)
-
-username_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[5]/label/div/div[2]/div/input""")))
-
-username_input.send_keys(username)
-
-next_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div/div/div/div[6]/div""")))
-next_button.click()
-
-password_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[1]/div/div/div[3]/div/label/div/div[2]/div[1]/input""")))
-
-password_input.send_keys(password)
-
-login_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(("xpath", """//*[@id="layers"]/div/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div[2]/div[2]/div/div[1]/div/div/div/div""")))
-login_button.click()
-
-time.sleep(4)
-main_twitter = "https://twitter.com/gotbit_io/following"
-driver.get(main_twitter)
-time.sleep(2)
-
-def scroll_to_bottom(driver):
-    # Get the height of the current page
-    last_height = driver.execute_script("return document.body.scrollHeight")
-
-    while True:
-        # Scroll down to the bottom
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-        # Wait for some time to load content
-        time.sleep(4)
-
-        # Calculate new height after scrolling
-        new_height = driver.execute_script("return document.body.scrollHeight")
-
-        # If the height doesn't change, then we've reached the bottom
-        if new_height == last_height:
-            break
-
-        last_height = new_height
-
-# Call the function to scroll down
-scroll_to_bottom(driver)
-
-User_Name = driver.find_elements("xpath", "//div[@class='user-item-text']/span[1]")
-User_Mail = driver.find_elements("xpath", "//div[@class='user-item-text']/span[2]")
-
-User_Links = driver.find_elements("xpath", "//a[@class='user-item-link']")
-
-# Concatenate the two lists
-Followers = zip(User_Name, User_Mail)
-
-following_list = []
-acc_link = []
+    return most_recent_data, second_most_recent_data
 
 
-for user_name, user_mail in Followers:
-    formatted_user = f"{user_name.text} ({user_mail.text})"
-    following_list.append(formatted_user)
+# Step 2: Creating dataframes for "Followed Added", "Follow Removed", and "Overall"
+
+def create_dataframes(most_recent_data, second_most_recent_data):
+    most_recent_df = pd.DataFrame(most_recent_data)
+    second_most_recent_df = pd.DataFrame(second_most_recent_data)
+
+    followed_added_df = pd.DataFrame(columns=['User', 'User_Link'])
+    followed_removed_df = pd.DataFrame(columns=['User', 'User_Link'])
+
+    for index, row in second_most_recent_df.iterrows():
+        if row['User'] not in most_recent_df['User'].values or row['User_Link'] not in most_recent_df[
+            'User_Link'].values:
+            followed_removed_df.loc[len(followed_removed_df)] = row
+
+    for index, row in most_recent_df.iterrows():
+        if row['User'] not in second_most_recent_df['User'].values or row['User_Link'] not in second_most_recent_df[
+            'User_Link'].values:
+            followed_added_df.loc[len(followed_added_df)] = row
+
+    overall_df = most_recent_df.copy()
+
+    return followed_added_df, followed_removed_df, overall_df
 
 
-for link in User_Links:
-    userl = link.get_attribute('href')
-    acc_link.append(userl)
+# Step 3: Integrating Google Sheets API to push data into Google Sheets
 
-df = pd.DataFrame({'User': following_list, 'User_Link': acc_link})
+def push_to_google_sheets(dataframe, sheet_name, timestamp):
+    # Load Service Account Credentials
+    creds = ServiceAccountCredentials.from_json_keyfile_name('Twitter_Scraper/pro-course-388221-0a1e15f868e5.json')
 
-# Specify the directory path
-directory = os.path.join(repo_directory, 'Twitter_Scraper/Daily_Data')
+    # Authorize with Google Sheets API
+    client = gspread.authorize(creds)
 
-# Create the directory if it doesn't exist
-os.makedirs(directory, exist_ok=True)
+    # Access the Google Sheet
+    sheet = client.open("X Twitter Gobit Hedge Fund").worksheet(sheet_name)
 
-# Generate filename based on current date and time
-current_time = datetime.now().strftime("%m-%d-%Y-%H-%M")
-filename = os.path.join(directory, f"{current_time}.json")
+    # Convert DataFrame to List of Lists
+    data = dataframe.values.tolist()
 
-# Save the DataFrame to JSON file with indentation and proper formatting
-df.to_json(filename, orient='records', indent=4)
+    # Update the Google Sheet
+    if data:  # If data exists
+        sheet.append_row(["Data for " + timestamp])  # Add timestamp as header
+        sheet.append_rows(data)  # Append data to the Google Sheet
+    else:  # If no data exists
+        sheet.append_row(["Data for " + timestamp])  # Add timestamp as header
+        sheet.append_row(["No User", "No Link"])  # Add "No User" and "No Link" to indicate no data
 
-driver.quit()
+    pass
 
 
+# Step 4: Automating the process
 
+import pytz
+
+def main():
+    folder_path = "Twitter_Scraper/Daily_Data"
+    most_recent_data, second_most_recent_data = read_json_files(folder_path)
+    followed_added_df, followed_removed_df, overall_df = create_dataframes(most_recent_data, second_most_recent_data)
+
+    # Push data to Google Sheets
+    ct = pytz.timezone('America/Chicago')  # Central Time (CT) timezone
+    timestamp = datetime.now(ct).strftime("%m-%d-%Y at %I:%M %p CST")
+    
+    # If there's no data, create a DataFrame with 'No User' and 'No Link'
+    if followed_added_df.empty:
+        followed_added_df = pd.DataFrame({'User': ['No User'], 'User_Link': ['No Link']})
+    if followed_removed_df.empty:
+        followed_removed_df = pd.DataFrame({'User': ['No User'], 'User_Link': ['No Link']})
+    if overall_df.empty:
+        overall_df = pd.DataFrame({'User': ['No User'], 'User_Link': ['No Link']})
+
+    push_to_google_sheets(followed_added_df, "Follow Added", timestamp)
+    push_to_google_sheets(followed_removed_df, "Follow Removed", timestamp)
+    push_to_google_sheets(overall_df, "Overall", timestamp)
+
+
+if __name__ == "__main__":
+    main()
