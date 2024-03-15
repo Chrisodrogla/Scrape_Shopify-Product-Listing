@@ -70,10 +70,10 @@ def push_to_google_sheets(dataframe, sheet_name, timestamp):
         col_num += 1
     
     # Step 8: Append data to the Google Sheet
-    sheet.update_cell(1, col_num, "")
-    sheet.update_cells([gspread.models.Cell(row=1, col=col_num + i, value=value) for i, value in enumerate(flat_data)])
+    sheet.update('A1', [[value] for value in flat_data])
 
     pass
+
 
 # Step 4: Automating the process
 
