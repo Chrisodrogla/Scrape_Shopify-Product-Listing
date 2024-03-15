@@ -54,7 +54,7 @@ def push_to_google_sheets(dataframe, sheet_name, timestamp):
     client = gspread.authorize(creds)
     
     # Step 5: Access the Google Sheet
-    sheet = client.open("Your Google Sheet Name").worksheet(sheet_name)
+    sheet = client.open("X Twitter Gobit Hedge Fund").worksheet(sheet_name)
     
     # Step 6: Convert DataFrame to List of Lists
     data = dataframe.values.tolist()
