@@ -26,25 +26,30 @@ def read_json_files(folder_path):
 # Step 2: Creating dataframes for "Followed Added", "Follow Removed", and "Overall"
 
 def create_dataframes(most_recent_data, second_most_recent_data):
-    most_recent_df = pd.DataFrame(most_recent_data)
-    second_most_recent_df = pd.DataFrame(second_most_recent_data)
+    if not most_recent_data or not second_most_recent_data:
+        # If there is no data, return dataframes with 'None' values
+        followed_added_df = pd.DataFrame({'User': [None], 'User_Link': [None]})
+        followed_removed_df = pd.DataFrame({'User': [None], 'User_Link': [None]})
+        overall_df = pd.DataFrame({'User': [None], 'User_Link': [None]})
+    else:
+        most_recent_df = pd.DataFrame(most_recent_data)
+        second_most_recent_df = pd.DataFrame(second_most_recent_data)
 
-    followed_added_df = pd.DataFrame(columns=['User', 'User_Link'])
-    followed_removed_df = pd.DataFrame(columns=['User', 'User_Link'])
+        followed_added_df = pd.DataFrame(columns=['User', 'User_Link'])
+        followed_removed_df = pd.DataFrame(columns=['User', 'User_Link'])
 
-    for index, row in second_most_recent_df.iterrows():
-        if row['User'] not in most_recent_df['User'].values or row['User_Link'] not in most_recent_df[
-            'User_Link'].values:
-            followed_removed_df.loc[len(followed_removed_df)] = row
+        for index, row in second_most_recent_df.iterrows():
+            if row['User'] not in most_recent_df['User'].values or row['User_Link'] not in most_recent_df['User_Link'].values:
+                followed_removed_df.loc[len(followed_removed_df)] = row
 
-    for index, row in most_recent_df.iterrows():
-        if row['User'] not in second_most_recent_df['User'].values or row['User_Link'] not in second_most_recent_df[
-            'User_Link'].values:
-            followed_added_df.loc[len(followed_added_df)] = row
+        for index, row in most_recent_df.iterrows():
+            if row['User'] not in second_most_recent_df['User'].values or row['User_Link'] not in second_most_recent_df['User_Link'].values:
+                followed_added_df.loc[len(followed_added_df)] = row
 
-    overall_df = most_recent_df.copy()
+        overall_df = most_recent_df.copy()
 
     return followed_added_df, followed_removed_df, overall_df
+
 
 
 # Step 3: Integrating Google Sheets API to push data into Google Sheets
