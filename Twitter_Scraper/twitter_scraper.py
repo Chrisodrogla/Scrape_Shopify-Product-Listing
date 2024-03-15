@@ -22,13 +22,12 @@ def read_json_files(folder_path):
 
     return most_recent_data, second_most_recent_data
 
-
 # Step 2: Creating dataframes for "Followed Added", "Follow Removed", and "Overall"
 
 def create_dataframes(most_recent_data, second_most_recent_data):
     if not most_recent_data or not second_most_recent_data:
-        # If there is no data, return dataframes with a single row containing 'no user' and 'no user link'
-        no_user_data = {'User': ['no user'], 'User_Link': ['no link']}
+        # If there is no data, return dataframes with a single row containing 'no user' and 'no link'
+        no_user_data = {'User': ['"no user"'], 'User_Link': ['"no link"']}
         followed_added_df = pd.DataFrame(data=no_user_data)
         followed_removed_df = pd.DataFrame(data=no_user_data)
         overall_df = pd.DataFrame(data=no_user_data)
@@ -50,7 +49,6 @@ def create_dataframes(most_recent_data, second_most_recent_data):
         overall_df = most_recent_df.copy()
 
     return followed_added_df, followed_removed_df, overall_df
-
 
 
 
