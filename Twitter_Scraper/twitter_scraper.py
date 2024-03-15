@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
-
+import pytz
 
 # Step 1: Reading the JSON files and comparing the most recent and second most recent ones
 
@@ -75,13 +75,25 @@ def push_to_google_sheets(dataframe, sheet_name, timestamp):
 
 # Step 4: Automating the process
 
+import pytz
+
 def main():
     folder_path = "Twitter_Scraper/Daily_Data"
     most_recent_data, second_most_recent_data = read_json_files(folder_path)
     followed_added_df, followed_removed_df, overall_df = create_dataframes(most_recent_data, second_most_recent_data)
 
     # Push data to Google Sheets
-    timestamp = datetime.now().strftime("%m-%d-%Y at %I:%M %p CST")
+    ct = pytz.timezone('America/Chicago')  # Central Time (CT) timezone
+    timestamp = datetime.now(ct).strftime("%m-%d-%Y at %I:%M %p CST")
+    
+    # If there's no data, create a DataFrame with 'No User' and 'No Link'
+    if followed_added_df.empty:
+        followed_added_df = pd.DataFrame({'User': ['No User'], 'User_Link': ['No Link']})
+    if followed_removed_df.empty:
+        followed_removed_df = pd.DataFrame({'User': ['No User'], 'User_Link': ['No Link']})
+    if overall_df.empty:
+        overall_df = pd.DataFrame({'User': ['No User'], 'User_Link': ['No Link']})
+
     push_to_google_sheets(followed_added_df, "Follow Added", timestamp)
     push_to_google_sheets(followed_removed_df, "Follow Removed", timestamp)
     push_to_google_sheets(overall_df, "Overall", timestamp)
