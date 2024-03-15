@@ -44,8 +44,6 @@ def create_dataframes(most_recent_data, second_most_recent_data):
     return followed_added_df, followed_removed_df, overall_df
 
 
-# Step 3: Integrating Google Sheets API to push data into Google Sheets
-
 def push_to_google_sheets(dataframe, sheet_name, timestamp):
     # Step 3: Load Service Account Credentials
     creds = ServiceAccountCredentials.from_json_keyfile_name('Twitter_Scraper/pro-course-388221-0a1e15f868e5.json')
@@ -67,7 +65,7 @@ def push_to_google_sheets(dataframe, sheet_name, timestamp):
     # Step 7: Find the last column with data
     col_num = 1
     while sheet.cell(1, col_num).value:
-        col_num += 1
+        col_num += 2  # Increment by 2 to move to the next empty column
     
     # Step 8: Append data to the Google Sheet
     sheet.update('A1', [[value] for value in flat_data])
