@@ -1,7 +1,7 @@
 import os
 import json
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 
@@ -22,56 +22,53 @@ def read_json_files(folder_path):
 
     return most_recent_data, second_most_recent_data
 
+
 # Step 2: Creating dataframes for "Followed Added", "Follow Removed", and "Overall"
 
 def create_dataframes(most_recent_data, second_most_recent_data):
-    if not most_recent_data or not second_most_recent_data:
-        # If there is no data, return dataframes with a single row containing 'no user' and 'no link'
-        no_user_data = {'User': ['"no user"'], 'User_Link': ['"no link"']}
-        followed_added_df = pd.DataFrame(data=no_user_data)
-        followed_removed_df = pd.DataFrame(data=no_user_data)
-        overall_df = pd.DataFrame(data=no_user_data)
-    else:
-        most_recent_df = pd.DataFrame(most_recent_data)
-        second_most_recent_df = pd.DataFrame(second_most_recent_data)
+    most_recent_df = pd.DataFrame(most_recent_data)
+    second_most_recent_df = pd.DataFrame(second_most_recent_data)
 
-        followed_added_df = pd.DataFrame(columns=['User', 'User_Link'])
-        followed_removed_df = pd.DataFrame(columns=['User', 'User_Link'])
+    followed_added_df = pd.DataFrame(columns=['User', 'User_Link'])
+    followed_removed_df = pd.DataFrame(columns=['User', 'User_Link'])
 
-        for index, row in second_most_recent_df.iterrows():
-            if row['User'] not in most_recent_df['User'].values or row['User_Link'] not in most_recent_df['User_Link'].values:
-                followed_removed_df.loc[len(followed_removed_df)] = row
+    for index, row in second_most_recent_df.iterrows():
+        if row['User'] not in most_recent_df['User'].values or row['User_Link'] not in most_recent_df[
+            'User_Link'].values:
+            followed_removed_df.loc[len(followed_removed_df)] = row
 
-        for index, row in most_recent_df.iterrows():
-            if row['User'] not in second_most_recent_df['User'].values or row['User_Link'] not in second_most_recent_df['User_Link'].values:
-                followed_added_df.loc[len(followed_added_df)] = row
+    for index, row in most_recent_df.iterrows():
+        if row['User'] not in second_most_recent_df['User'].values or row['User_Link'] not in second_most_recent_df[
+            'User_Link'].values:
+            followed_added_df.loc[len(followed_added_df)] = row
 
-        overall_df = most_recent_df.copy()
+    overall_df = most_recent_df.copy()
 
     return followed_added_df, followed_removed_df, overall_df
-
-
-
 
 
 # Step 3: Integrating Google Sheets API to push data into Google Sheets
 
 def push_to_google_sheets(dataframe, sheet_name, timestamp):
-    # Step 3: Load Service Account Credentials
+    # Load Service Account Credentials
     creds = ServiceAccountCredentials.from_json_keyfile_name('Twitter_Scraper/pro-course-388221-0a1e15f868e5.json')
 
-    # Step 4: Authorize with Google Sheets API
+    # Authorize with Google Sheets API
     client = gspread.authorize(creds)
 
-    # Step 5: Access the Google Sheet
+    # Access the Google Sheet
     sheet = client.open("X Twitter Gobit Hedge Fund").worksheet(sheet_name)
 
-    # Step 6: Convert DataFrame to List of Lists
+    # Convert DataFrame to List of Lists
     data = dataframe.values.tolist()
 
-    # Step 7: Update the Google Sheet
-    sheet.append_row(["Data for " + timestamp])  # Add timestamp as header
-    sheet.append_rows(data)  # Append data to the Google Sheet
+    # Update the Google Sheet
+    if data:  # If data exists
+        sheet.append_row(["Data for " + timestamp])  # Add timestamp as header
+        sheet.append_rows(data)  # Append data to the Google Sheet
+    else:  # If no data exists
+        sheet.append_row(["Data for " + timestamp])  # Add timestamp as header
+        sheet.append_row(["No User", "No Link"])  # Add "No User" and "No Link" to indicate no data
 
     pass
 
