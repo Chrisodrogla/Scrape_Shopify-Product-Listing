@@ -33,15 +33,16 @@ def create_dataframes(most_recent_data, second_most_recent_data):
     
     for index, row in second_most_recent_df.iterrows():
         if row['User'] not in most_recent_df['User'].values or row['User_Link'] not in most_recent_df['User_Link'].values:
-            followed_removed_df = followed_removed_df.append(row, ignore_index=True)
+            followed_removed_df.loc[len(followed_removed_df)] = row
     
     for index, row in most_recent_df.iterrows():
         if row['User'] not in second_most_recent_df['User'].values or row['User_Link'] not in second_most_recent_df['User_Link'].values:
-            followed_added_df = followed_added_df.append(row, ignore_index=True)
+            followed_added_df.loc[len(followed_added_df)] = row
     
     overall_df = most_recent_df.copy()
     
     return followed_added_df, followed_removed_df, overall_df
+
 
 # Step 3: Integrating Google Sheets API to push data into Google Sheets
 
