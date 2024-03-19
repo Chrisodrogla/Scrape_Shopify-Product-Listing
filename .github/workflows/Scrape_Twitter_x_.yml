@@ -4,8 +4,8 @@ name: X Twitter Scraper
 on:
   workflow_dispatch:
   schedule:
-    # Run at 10:00 AM UTC every day
-    - cron: '10 16 * * *'
+  - cron: '10 0 * * *'
+
 
 jobs:
   run_script:
